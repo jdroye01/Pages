@@ -695,16 +695,6 @@
     <p>This Privacy Policy is governed by the laws of the State of Georgia, United States, without regard to its conflict of law provisions. Any disputes arising under this policy shall be subject to the exclusive jurisdiction of the courts located in Georgia.</p>
   </div>
 
-  <hr class="divider" />
-
-  <div class="contact-card">
-    <h3>Questions or Concerns?</h3>
-    <p>If you have any questions about this Privacy Policy or how ChurchScore handles data, please reach out.</p>
-    <a href="mailto:privacy@churchscore.app">privacy@churchscore.app</a>
-  </div>
-
-</div>
-
 <footer>
   <p><strong>ChurchScore</strong> &nbsp;·&nbsp; Privacy Policy &nbsp;·&nbsp; Effective January 1, 2025 &nbsp;·&nbsp; Last Updated March 30, 2026</p>
   <p style="margin-top:0.4rem;">© 2025–2026 ChurchScore. All rights reserved.</p>
