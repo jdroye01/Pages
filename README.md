@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Privacy Policy — ChurchScore</title>
+  <title>Privacy Policy — ChurchScore & ChurchScore Live</title>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
   <style>
     :root {
@@ -414,7 +414,7 @@
 <header>
   <div class="header-inner">
     <div class="app-badge">iOS Application</div>
-    <h1>ChurchScore<br><em>Privacy Policy</em></h1>
+    <h1>ChurchScore & ChurchScore Live<br><em>Privacy Policy</em></h1>
     <p class="header-meta">
       <span>Effective: January 1, 2025</span>
       <span>·</span>
@@ -427,7 +427,7 @@
 
   <div class="summary-banner">
     <h2>The Short Version</h2>
-    <p>ChurchScore does not collect, share, or sell any personal information. All data you enter — member names, points, attendance records — is stored privately on your own devices and your own server. We have no access to your data whatsoever.</p>
+    <p>ChurchScore & ChurchScore Live do not collect, share, or sell any personal information. All data you enter — member names, points, attendance records — is stored privately on your own devices and your own server. We have no access to your data whatsoever.</p>
   </div>
 
   <div class="pillars">
@@ -457,11 +457,11 @@
   <div class="section">
     <span class="section-number">Section 01</span>
     <h2>Overview & Scope</h2>
-    <p>This Privacy Policy describes how ChurchScore ("the App," "we," "our") handles information when you use the ChurchScore iOS application. ChurchScore is a locally-hosted points and attendance tracking tool designed for church organizations.</p>
-    <p>This policy applies to all users of the ChurchScore iOS application. By using the App, you acknowledge that you have read and understood this policy.</p>
+    <p>This Privacy Policy describes how ChurchScore & ChurchScore Live ("the App," "we," "our") handles information when you use the ChurchScore & ChurchScore Live iOS application. ChurchScore & ChurchScore Live are locally-hosted points and attendance tracking tool designed for church organizations.</p>
+    <p>This policy applies to all users of the ChurchScore & ChurchScore Live iOS application. By using the App, you acknowledge that you have read and understood this policy.</p>
     <div class="callout green">
       <span class="callout-icon">✅</span>
-      <div class="callout-body"><strong>Self-hosted by design.</strong> ChurchScore is architected so that all data lives on infrastructure you control — your iPads and your own server. We, the developers, have no servers, no cloud accounts, and no systems through which your data passes.</div>
+      <div class="callout-body"><strong>Self-hosted by design.</strong> ChurchScore & ChurchScore Live are architected so that all data lives on infrastructure you control — your iPads and your own server. We, the developers, have no servers, no cloud accounts, and no systems through which your data passes.</div>
     </div>
   </div>
 
@@ -469,7 +469,7 @@
   <div class="section">
     <span class="section-number">Section 02</span>
     <h2>Information the App Stores</h2>
-    <p>ChurchScore stores the following data locally on your device and, if configured, on your self-hosted server:</p>
+    <p>ChurchScore & ChurchScore Live stores the following data locally on your device and, if configured, on your self-hosted server:</p>
 
     <table class="data-table">
       <thead>
@@ -525,7 +525,7 @@
   <div class="section">
     <span class="section-number">Section 03</span>
     <h2>Information We Do Not Collect</h2>
-    <p>ChurchScore does not collect any of the following:</p>
+    <p>ChurchScore & ChurchScore Live do not collect any of the following:</p>
     <ul class="policy-list">
       <li>Usage analytics or behavioral data</li>
       <li>Crash reports or diagnostics sent to the developer</li>
@@ -538,7 +538,7 @@
     </ul>
     <div class="callout green">
       <span class="callout-icon">✅</span>
-      <div class="callout-body"><strong>No analytics SDKs.</strong> ChurchScore contains no third-party analytics, advertising, or tracking libraries. The only external network communication the app makes is to the server address you configure yourself.</div>
+      <div class="callout-body"><strong>No analytics SDKs.</strong> ChurchScore & ChurchScore Live contain no third-party analytics, advertising, or tracking libraries. The only external network communication the app makes is to the server address you configure yourself.</div>
     </div>
   </div>
 
@@ -546,7 +546,7 @@
   <div class="section">
     <span class="section-number">Section 04</span>
     <h2>How Data Is Used</h2>
-    <p>Data stored by ChurchScore is used solely to provide the features of the application:</p>
+    <p>Data stored by ChurchScore & ChurchScore Live are used solely to provide the features of the application:</p>
     <ul class="policy-list">
       <li>Displaying member rosters and point totals</li>
       <li>Calculating attendance statistics and tier status</li>
@@ -560,11 +560,11 @@
   <div class="section">
     <span class="section-number">Section 05</span>
     <h2>Data Sharing & Third Parties</h2>
-    <p>We do not share any data with third parties. ChurchScore has no relationship with advertising networks, data brokers, analytics providers, or any external services.</p>
+    <p>We do not share any data with third parties. ChurchScore & ChurchScore Live have no relationship with advertising networks, data brokers, analytics providers, or any external services.</p>
 
     <div class="callout amber">
       <span class="callout-icon">ℹ️</span>
-      <div class="callout-body"><strong>Your server, your rules.</strong> If you configure the optional real-time sync feature, data flows between your iPads and a server that you own and operate. The developers of ChurchScore have no access to, visibility into, or control over that server or the data it stores.</div>
+      <div class="callout-body"><strong>Your server, your rules.</strong> If you configure the optional real-time sync feature, data flows between your iPads and a server that you own and operate. The developers of ChurchScore & ChurchScore Live have no access to, visibility into, or control over that server or the data it stores.</div>
     </div>
 
     <p>The only scenario in which data leaves the app is when you use the built-in export feature (PDF or CSV reports), which saves a file to your device or shares it via the standard iOS share sheet. You are solely responsible for how you handle exported files.</p>
@@ -574,21 +574,21 @@
   <div class="section">
     <span class="section-number">Section 06</span>
     <h2>Children's Privacy</h2>
-    <p>ChurchScore is designed for use by church administrators and teachers. The App may store the names of minors (children who are church members) as part of its member roster functionality.</p>
+    <p>ChurchScore & ChurchScore Live are designed for use by church administrators and teachers. The App may store the names of minors (children who are church members) as part of its member roster functionality.</p>
 
     <div class="callout blue">
       <span class="callout-icon">🛡️</span>
-      <div class="callout-body"><strong>COPPA Compliance.</strong> ChurchScore does not collect any information directly from children. The App is operated by adult church administrators. Member names entered into the system are managed entirely by those administrators on privately controlled infrastructure. No member data — including data relating to minors — is transmitted to the App's developers or any third party.</div>
+      <div class="callout-body"><strong>COPPA Compliance.</strong> ChurchScore & ChurchScore Live do not collect any information directly from children. The App is operated by adult church administrators. Member names entered into the system are managed entirely by those administrators on privately controlled infrastructure. No member data — including data relating to minors — is transmitted to the App's developers or any third party.</div>
     </div>
 
-    <p>If you believe that information about a child has been entered into the system inappropriately, please contact your organization's ChurchScore administrator to have it removed from your local database and server.</p>
+    <p>If you believe that information about a child has been entered into the system inappropriately, please contact your organization's ChurchScore or ChurchScore Live administrator to have it removed from your local database and server.</p>
   </div>
 
   <!-- Section 7 -->
   <div class="section">
     <span class="section-number">Section 07</span>
     <h2>Data Security</h2>
-    <p>Because ChurchScore stores data locally on your devices and on your own server, the security of that data is primarily your responsibility. We recommend the following best practices:</p>
+    <p>Because ChurchScore & ChurchScore Live store data locally on your devices and on your own server, the security of that data is primarily your responsibility. We recommend the following best practices:</p>
     <ul class="policy-list">
       <li>Keep your iPads updated to the latest version of iOS</li>
       <li>Use a strong passcode or Face ID / Touch ID on each device</li>
@@ -645,7 +645,7 @@
         </tr>
         <tr>
           <td>Objection</td>
-          <td>Contact your organization's ChurchScore administrator</td>
+          <td>Contact your organization's ChurchScore or ChurchScore Live administrator</td>
         </tr>
       </tbody>
     </table>
@@ -656,7 +656,7 @@
   <div class="section">
     <span class="section-number">Section 10</span>
     <h2>Photo Library Access</h2>
-    <p>ChurchScore may request access to your device's photo library or camera solely for the purpose of setting a profile photo for a church member. This access is:</p>
+    <p>ChurchScore & ChurchScore Live may request access to your device's photo library or camera solely for the purpose of setting a profile photo for a church member. This access is:</p>
     <ul class="policy-list">
       <li>Requested only when you tap a member's profile photo to change it</li>
       <li>Used only to select or capture a single image</li>
@@ -669,14 +669,14 @@
   <div class="section">
     <span class="section-number">Section 11</span>
     <h2>Network Communication</h2>
-    <p>ChurchScore communicates over the network only in the following circumstances:</p>
+    <p>ChurchScore & ChurchScore Live communicate over the network only in the following circumstances:</p>
     <ul class="policy-list">
       <li>When connecting to the sync server address you configure in Settings. This is a server you own and operate.</li>
       <li>When pulling a full data sync from your server via the REST endpoint on your server.</li>
     </ul>
     <div class="callout blue">
       <span class="callout-icon">🌐</span>
-      <div class="callout-body"><strong>No external connections.</strong> ChurchScore makes no connections to any servers operated by the App's developers, Apple (beyond standard App Store functions), or any third party. All network traffic goes exclusively to the server address you provide.</div>
+      <div class="callout-body"><strong>No external connections.</strong> ChurchScore & ChurchScore Live make no connections to any servers operated by the App's developers, Apple (beyond standard App Store functions), or any third party. All network traffic goes exclusively to the server address you provide.</div>
     </div>
   </div>
 
@@ -696,8 +696,8 @@
   </div>
 
 <footer>
-  <p><strong>ChurchScore</strong> &nbsp;·&nbsp; Privacy Policy &nbsp;·&nbsp; Effective January 1, 2025 &nbsp;·&nbsp; Last Updated March 30, 2026</p>
-  <p style="margin-top:0.4rem;">© 2025–2026 ChurchScore. All rights reserved.</p>
+  <p><strong>ChurchScore & ChurchScore Live</strong> &nbsp;·&nbsp; Privacy Policy &nbsp;·&nbsp; Effective January 1, 2025 &nbsp;·&nbsp; Last Updated March 30, 2026</p>
+  <p style="margin-top:0.4rem;">© 2025–2026 ChurchScore & ChurchScore Live. All rights reserved.</p>
 </footer>
 
 </body>
