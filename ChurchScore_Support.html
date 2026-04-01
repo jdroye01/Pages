@@ -514,7 +514,7 @@
     <li><a href="#faq">FAQ</a></li>
     <li><a href="#setup">Setup</a></li>
     <li><a href="#contact">Contact</a></li>
-    <li><a href="privacy-policy.html">Privacy Policy</a></li>
+    <li><a href="https://jdroye01.github.io/Pages/ChurchScore-Privacy-Policy.html">Privacy Policy</a></li>
   </ul>
 </nav>
 
@@ -617,7 +617,7 @@
             <p>This means the app can't reach your sync server. Check the following:</p>
             <p>1. Make sure the server is running on your host machine (<code>systemctl status churchscore</code> on Linux).</p>
             <p>2. Confirm the Server URL in Settings → Live Sync matches your server's IP exactly, including the <code>ws://</code> prefix and port number.</p>
-            <p>3. If using Tailscale, confirm Tailscale is connected and active on both the server and the iPad.</p>
+            <p>3. If using a VPN, confirm your VPN is connected and active on both the server and the iPad.</p>
             <p>4. The app will automatically reconnect every 5 seconds — once the server is reachable it will connect on its own.</p>
           </div>
         </div>
@@ -700,8 +700,8 @@
         <div class="faq-body">
           <div class="faq-content">
             <p>Yes. ChurchScore is designed as a fully self-hosted app. Your data never passes through any servers owned by the ChurchScore developers. It lives entirely on your iPads and your own server.</p>
-            <p>We recommend using <strong>Tailscale</strong> to keep your server on a private encrypted network, ensuring it's never exposed to the public internet.</p>
-            <p>Read our full <a href="privacy-policy.html" style="color:var(--gold)">Privacy Policy</a> for complete details.</p>
+            <p>We recommend using <strong>a VPN</strong> to keep your server on a private encrypted network, ensuring it's never exposed to the public internet.</p>
+            <p>Read our full <a href="https://jdroye01.github.io/Pages/ChurchScore-Privacy-Policy.html" style="color:var(--gold)">Privacy Policy</a> for complete details.</p>
           </div>
         </div>
       </div>
@@ -732,15 +732,15 @@
       <div class="step">
         <div class="step-num">2</div>
         <div class="step-body">
-          <div class="step-title">Install Tailscale on the server and each iPad</div>
-          <div class="step-desc">Download Tailscale on your server machine and sign in. Install the Tailscale app on each iPad and sign in with the same account. Note your server's Tailscale IP — it starts with <code>100.x.x.x</code>.</div>
+          <div class="step-title">Install your VPN of choice on the server and each iPad</div>
+          <div class="step-desc">Download your VPN of choice on your server machine and sign in. Install the your VPN's app on each iPad and sign in with the same account. Note your server's your VPN IP — it may start with <code>100.x.x.x</code>.</div>
         </div>
       </div>
       <div class="step">
         <div class="step-num">3</div>
         <div class="step-body">
           <div class="step-title">Enter the server URL in ChurchScore</div>
-          <div class="step-desc">Open ChurchScore on each iPad → Settings → Live Sync → Edit → enter <code>ws://100.x.x.x:8080</code> (your Tailscale IP) → Save.</div>
+          <div class="step-desc">Open ChurchScore on each iPad → Settings → Live Sync → Edit → enter <code>ws://100.x.x.x:8080</code> (your VPN IP) → Save.</div>
         </div>
       </div>
       <div class="step">
@@ -769,7 +769,7 @@
 
     <div class="info-box amber">
       <span class="info-box-icon">💡</span>
-      <span>Real-time sync requires all iPads and the server to be connected to the same Tailscale network. The sync status indicator in Settings → Live Sync shows the current connection state.</span>
+      <span>Real-time sync requires all iPads and the server to be connected to the same VPN network. The sync status indicator in Settings → Live Sync shows the current connection state.</span>
     </div>
 
     <div class="faq-list">
@@ -803,7 +803,7 @@
         </button>
         <div class="faq-body">
           <div class="faq-content">
-            <p>Open a browser on any device connected to your Tailscale network and visit <code>http://100.x.x.x:8080/health</code> (replace with your server's Tailscale IP). You should see a JSON response showing <code>"status": "ok"</code> and the number of connected clients.</p>
+            <p>Open a browser on any device connected to your VPN network and visit <code>http://100.x.x.x:8080/health</code> (replace with your server's VPN IP). You should see a JSON response showing <code>"status": "ok"</code> and the number of connected clients.</p>
             <p>On the server itself, run <code>systemctl status churchscore</code> (Linux) or check Services (Windows).</p>
           </div>
         </div>
@@ -819,35 +819,28 @@
     </div>
 
     <p style="color:var(--ink-soft); font-size:0.95rem; margin-bottom: 0.5rem;">
-      Can't find what you're looking for? Reach out and we'll get back to you as soon as possible.
+      Can't find what you're looking for?
     </p>
 
     <div class="contact-grid">
       <div class="contact-card">
         <span class="cc-icon">✉️</span>
         <div class="cc-title">Email Support</div>
-        <div class="cc-desc">For setup help, bug reports, or general questions. We aim to respond within 2 business days.</div>
-        <a class="cc-link" href="mailto:support@churchscore.app">support@churchscore.app</a>
-      </div>
-
-      <div class="contact-card">
-        <span class="cc-icon">🐛</span>
-        <div class="cc-title">Report a Bug</div>
-        <div class="cc-desc">Found something broken? Open an issue on GitHub with steps to reproduce and we'll investigate.</div>
-        <a class="cc-link" href="https://github.com/yourusername/churchscore/issues" target="_blank" rel="noopener">Open GitHub Issue</a>
+        <div class="cc-desc">For setup help, bug reports, or general questions. </div>
+        <a class="cc-link" href="mailto:support@cornerstonelabs.info">support@cornerstonelabs.info</a>
       </div>
 
       <div class="contact-card">
         <span class="cc-icon">🔒</span>
         <div class="cc-title">Privacy</div>
         <div class="cc-desc">Questions about how ChurchScore handles data or your organization's privacy.</div>
-        <a class="cc-link" href="privacy-policy.html">Read Privacy Policy</a>
+        <a class="cc-link" href="https://jdroye01.github.io/Pages/ChurchScore-Privacy-Policy.html">Read Privacy Policy</a>
       </div>
     </div>
 
     <div class="info-box blue" style="margin-top:2rem;">
       <span class="info-box-icon">⏱️</span>
-      <span>ChurchScore is maintained by a small team. We appreciate your patience and will do our best to respond promptly to all support requests.</span>
+      <span>ChurchScore is maintained by a small team. We appreciate your patience and will do our best to respond to requests.</span>
     </div>
   </div>
 
