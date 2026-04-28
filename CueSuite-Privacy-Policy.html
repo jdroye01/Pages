@@ -22,10 +22,10 @@
       --blue-bg:    #f0f4fa;
       --blue-bdr:   #c6d4e8;
     }
-
+ 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
-
+ 
     body {
       font-family: 'DM Sans', sans-serif;
       background: var(--cream);
@@ -34,7 +34,574 @@
       line-height: 1.75;
       font-weight: 300;
     }
-
+ 
+    /* ── NAV ── */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(250,248,244,0.92);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 0.9rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+ 
+    .nav-brand {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.35rem;
+      font-weight: 600;
+      color: var(--ink);
+      text-decoration: none;
+      letter-spacing: -0.01em;
+    }
+ 
+    .nav-brand em { font-style: italic; color: var(--gold); }
+ 
+    .nav-links {
+      display: flex;
+      gap: 0.25rem;
+      list-style: none;
+    }
+ 
+    .nav-links a {
+      font-size: 0.82rem;
+      font-weight: 400;
+      color: var(--ink-soft);
+      text-decoration: none;
+      padding: 0.4rem 0.85rem;
+      border-radius: 100px;
+      transition: background 0.15s, color 0.15s;
+      letter-spacing: 0.02em;
+    }
+ 
+    .nav-links a:hover {
+      background: var(--cream-dark);
+      color: var(--ink);
+    }
+ 
+    /* ── HERO ── */
+    .hero {
+      background: var(--ink);
+      color: var(--cream);
+      padding: 5rem 2rem 4.5rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+ 
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 50% 110%, rgba(184,146,74,0.12) 0%, transparent 70%),
+        repeating-linear-gradient(90deg, transparent, transparent 80px, rgba(184,146,74,0.03) 80px, rgba(184,146,74,0.03) 81px),
+        repeating-linear-gradient(0deg,  transparent, transparent 80px, rgba(184,146,74,0.03) 80px, rgba(184,146,74,0.03) 81px);
+    }
+ 
+    .hero-inner { position: relative; z-index: 1; max-width: 640px; margin: 0 auto; }
+ 
+    .hero-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(184,146,74,0.15);
+      border: 1px solid rgba(184,146,74,0.3);
+      border-radius: 100px;
+      padding: 0.3rem 0.9rem;
+      font-size: 0.72rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--gold-light);
+      margin-bottom: 1.75rem;
+      font-weight: 500;
+    }
+ 
+    .hero-pill::before {
+      content: '';
+      width: 5px; height: 5px;
+      background: var(--gold);
+      border-radius: 50%;
+    }
+ 
+    .hero h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(3rem, 7vw, 5rem);
+      font-weight: 300;
+      line-height: 1.05;
+      letter-spacing: -0.025em;
+      margin-bottom: 1.25rem;
+    }
+ 
+    .hero h1 em { font-style: italic; color: var(--gold-light); }
+ 
+    .hero p {
+      font-size: 1.05rem;
+      color: rgba(250,248,244,0.6);
+      max-width: 480px;
+      margin: 0 auto 2rem;
+      line-height: 1.7;
+    }
+ 
+    .hero-meta {
+      font-size: 0.78rem;
+      color: rgba(250,248,244,0.35);
+      letter-spacing: 0.06em;
+    }
+ 
+    /* ── LAYOUT ── */
+    .page-wrap {
+      max-width: 820px;
+      margin: 0 auto;
+      padding: 0 1.5rem 6rem;
+    }
+ 
+    /* ── SECTION HEADER ── */
+    .section-head {
+      margin: 4rem 0 1.5rem;
+      display: flex;
+      align-items: baseline;
+      gap: 1rem;
+    }
+ 
+    .section-head h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2rem;
+      font-weight: 400;
+      color: var(--ink);
+      line-height: 1.15;
+    }
+ 
+    .section-head .tag {
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--gold);
+      border: 1px solid rgba(184,146,74,0.3);
+      padding: 0.2rem 0.65rem;
+      border-radius: 100px;
+      white-space: nowrap;
+    }
+ 
+    /* ── POLICY BODY ── */
+    .policy-section {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 2rem 2.25rem;
+      margin-bottom: 1.25rem;
+    }
+ 
+    .policy-section h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.4rem;
+      font-weight: 600;
+      color: var(--ink);
+      margin-bottom: 0.75rem;
+      line-height: 1.2;
+    }
+ 
+    .policy-section p {
+      font-size: 0.93rem;
+      color: var(--ink-soft);
+      line-height: 1.8;
+      margin-bottom: 0.75rem;
+    }
+ 
+    .policy-section p:last-child { margin-bottom: 0; }
+ 
+    .policy-section ul {
+      margin: 0.5rem 0 0.75rem 1.25rem;
+      color: var(--ink-soft);
+      font-size: 0.93rem;
+      line-height: 1.8;
+    }
+ 
+    .policy-section ul li { margin-bottom: 0.25rem; }
+ 
+    .policy-section strong { color: var(--ink); font-weight: 500; }
+ 
+    .policy-section a {
+      color: var(--gold);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(184,146,74,0.3);
+      padding-bottom: 1px;
+      transition: color 0.15s, border-color 0.15s;
+    }
+ 
+    .policy-section a:hover { color: var(--gold-light); border-color: var(--gold-light); }
+ 
+    /* ── INFO BOX ── */
+    .info-box {
+      border-radius: 10px;
+      padding: 1.1rem 1.4rem;
+      margin: 1.5rem 0;
+      display: flex;
+      gap: 0.85rem;
+      font-size: 0.91rem;
+      line-height: 1.65;
+    }
+ 
+    .info-box.green { background: var(--green-bg); border: 1px solid var(--green-bdr); color: var(--ink-soft); }
+    .info-box.blue  { background: var(--blue-bg);  border: 1px solid var(--blue-bdr);  color: var(--ink-soft); }
+    .info-box-icon  { flex-shrink: 0; font-size: 1.1rem; }
+ 
+    /* ── TOC ── */
+    .toc {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1.75rem 2rem;
+      margin: 2.5rem 0 0;
+    }
+ 
+    .toc-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--ink);
+      margin-bottom: 1rem;
+    }
+ 
+    .toc ol {
+      padding-left: 1.25rem;
+      color: var(--ink-soft);
+      font-size: 0.9rem;
+      line-height: 2;
+    }
+ 
+    .toc ol a {
+      color: var(--gold);
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+ 
+    .toc ol a:hover { color: var(--gold-light); }
+ 
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 2.5rem 2rem;
+      text-align: center;
+      font-size: 0.8rem;
+      color: var(--ink-muted);
+    }
+ 
+    footer nav { position: static; background: none; border: none; padding: 0; justify-content: center; margin-bottom: 0.75rem; backdrop-filter: none; }
+    footer nav a { font-size: 0.8rem; color: var(--ink-muted); }
+    footer nav a:hover { color: var(--ink); background: none; }
+    .footer-copy { margin-top: 0.4rem; }
+ 
+    /* ── RESPONSIVE ── */
+    @media (max-width: 600px) {
+      .hero { padding: 3.5rem 1.25rem 3rem; }
+      nav { padding: 0.75rem 1.25rem; }
+      .nav-links { display: none; }
+      .section-head { flex-direction: column; gap: 0.5rem; }
+      .policy-section { padding: 1.5rem 1.25rem; }
+    }
+  </style>
+</head>
+<body>
+ 
+<!-- ── NAV ── -->
+<nav>
+  <a class="nav-brand" href="#">Cue<em>Suite</em></a>
+  <ul class="nav-links">
+    <li><a href="CueSuite-Support.html">Support</a></li>
+    <li><a href="#data">Data</a></li>
+    <li><a href="#networking">Networking</a></li>
+    <li><a href="#permissions">Permissions</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+ 
+<!-- ── HERO ── -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-pill">Privacy Policy</div>
+    <h1>Your data stays<br><em>on your device.</em></h1>
+    <p>CueSuite is designed with privacy as a foundation. We don't collect, store, or transmit your personal information.</p>
+    <div class="hero-meta">Last updated: April 2026 &nbsp;·&nbsp; Effective: April 2026</div>
+  </div>
+</section>
+ 
+<!-- ── PAGE ── -->
+<div class="page-wrap">
+ 
+  <div class="info-box green">
+    <span class="info-box-icon">✅</span>
+    <span><strong>The short version:</strong> CueSuite stores everything locally on your device. We do not collect personal data, use analytics, display ads, or transmit any of your content to external servers. The optional companion networking feature communicates only directly between your own devices on your local network.</span>
+  </div>
+ 
+  <!-- TOC -->
+  <div class="toc">
+    <div class="toc-title">Table of Contents</div>
+    <ol>
+      <li><a href="#overview">Overview</a></li>
+      <li><a href="#data">Data We Collect</a></li>
+      <li><a href="#storage">How Your Data Is Stored</a></li>
+      <li><a href="#networking">Companion Networking</a></li>
+      <li><a href="#permissions">Device Permissions</a></li>
+      <li><a href="#third-party">Third-Party Services</a></li>
+      <li><a href="#children">Children's Privacy</a></li>
+      <li><a href="#changes">Changes to This Policy</a></li>
+      <li><a href="#contact">Contact Us</a></li>
+    </ol>
+  </div>
+ 
+  <!-- ══ OVERVIEW ══ -->
+  <div id="overview">
+    <div class="section-head">
+      <h2>Overview</h2>
+      <span class="tag">Summary</span>
+    </div>
+ 
+    <div class="policy-section">
+      <h3>Who we are</h3>
+      <p>CueSuite is an independent iOS application designed for live sound cue management. It is developed and maintained by a small independent team.</p>
+      <p>This Privacy Policy explains what information CueSuite accesses, how that information is used, and your rights regarding it. By using the app, you agree to the practices described here.</p>
+    </div>
+ 
+    <div class="policy-section">
+      <h3>Our core commitment</h3>
+      <p>CueSuite is a <strong>fully on-device application</strong>. All cues, settings, and audio references are saved locally on your iPad using iOS-standard storage mechanisms. Nothing is transmitted to the developer, to third-party analytics providers, or to any remote server by the app itself.</p>
+      <p>The optional companion networking feature (used with CueSuite Mobile on iPhone) communicates exclusively between your own devices over your local Wi-Fi network or Bluetooth — no data passes through any external server.</p>
+    </div>
+  </div>
+ 
+  <!-- ══ DATA ══ -->
+  <div id="data">
+    <div class="section-head">
+      <h2>Data We Collect</h2>
+      <span class="tag">Data</span>
+    </div>
+ 
+    <div class="policy-section">
+      <h3>What the app stores locally</h3>
+      <p>CueSuite saves the following data on your device only, using <code>UserDefaults</code> and iOS security-scoped bookmarks:</p>
+      <ul>
+        <li>Cue titles you enter</li>
+        <li>File references (bookmarks) pointing to audio files you select</li>
+        <li>Playback settings per cue: volume level, lock state, start marker, and end marker</li>
+        <li>Named markers with start and optional end times</li>
+        <li>Next Cue chain assignments and optional marker entry points</li>
+        <li>Grid layout positions for cue tiles</li>
+        <li>Your current page index</li>
+        <li>Your chosen device display name and optional remote-access password (stored locally)</li>
+      </ul>
+      <p>This data never leaves your device through CueSuite. It is not uploaded, synced, or shared with anyone.</p>
+    </div>
+ 
+    <div class="policy-section">
+      <h3>What we do not collect</h3>
+      <p>CueSuite does <strong>not</strong> collect, store, or transmit any of the following:</p>
+      <ul>
+        <li>Your name, email address, or any identifying information</li>
+        <li>Your location</li>
+        <li>Usage analytics or crash reports sent to the developer</li>
+        <li>The contents of your audio files</li>
+        <li>Advertising identifiers</li>
+        <li>Any data whatsoever to external servers operated by the developer</li>
+      </ul>
+    </div>
+  </div>
+ 
+  <!-- ══ STORAGE ══ -->
+  <div id="storage">
+    <div class="section-head">
+      <h2>How Your Data Is Stored</h2>
+      <span class="tag">Storage</span>
+    </div>
+ 
+    <div class="policy-section">
+      <h3>On-device storage</h3>
+      <p>All app data is stored in your device's local <code>UserDefaults</code> database. This storage is sandboxed to CueSuite and is not accessible to other apps. It is included in iCloud Backup if you have iCloud Backup enabled for your device in iOS Settings.</p>
+      <p>Audio files themselves are not stored inside the app. CueSuite stores a secure bookmark reference to files you select from the Files app or Music Library, and uses that bookmark to access the file at playback time.</p>
+    </div>
+ 
+    <div class="policy-section">
+      <h3>Deleting your data</h3>
+      <p>To remove all CueSuite data from your device, delete the app from your iPad. iOS will remove all associated local storage, including saved cues, settings, and your device name, when the app is uninstalled.</p>
+    </div>
+  </div>
+ 
+  <!-- ══ NETWORKING ══ -->
+  <div id="networking">
+    <div class="section-head">
+      <h2>Companion Networking</h2>
+      <span class="tag">Wi-Fi &amp; Bluetooth</span>
+    </div>
+ 
+    <div class="info-box blue">
+      <span class="info-box-icon">ℹ️</span>
+      <span>The companion networking feature is entirely optional. If you never connect CueSuite Mobile, no networking code runs and no data is transmitted anywhere.</span>
+    </div>
+ 
+    <div class="policy-section">
+      <h3>How companion networking works</h3>
+      <p>When CueSuite Mobile (the iPhone companion app) connects to CueSuite on your iPad, the two apps communicate directly using one of two methods:</p>
+      <ul>
+        <li><strong>Wi-Fi (TCP/Bonjour):</strong> A local TCP connection is established on port 8765 between your iPad and iPhone on your local network. Bonjour is used to advertise the service so the iPhone can discover the iPad automatically without requiring manual IP entry.</li>
+        <li><strong>Bluetooth LE:</strong> A direct Bluetooth Low Energy connection is established between your devices. No internet connection is used.</li>
+      </ul>
+      <p>In both cases, communication is entirely peer-to-peer between your devices. No data passes through any server operated by the developer or any third party.</p>
+    </div>
+ 
+    <div class="policy-section">
+      <h3>What is transmitted over the local connection</h3>
+      <p>The only data sent between your iPad and iPhone is the current playback state and remote commands. Specifically:</p>
+      <ul>
+        <li>The title of the currently playing cue and its playback progress</li>
+        <li>The list of all cue titles and their marker counts</li>
+        <li>Named markers for the active cue</li>
+        <li>Transport commands (play, pause, resume, stop, fade out, jump to marker)</li>
+        <li>Your device display name (as configured in the gear menu)</li>
+        <li>Whether a password is required (a boolean flag — the password itself is never transmitted)</li>
+      </ul>
+      <p>Audio data is never transmitted. Your audio files remain entirely on the iPad.</p>
+    </div>
+ 
+    <div class="policy-section">
+      <h3>Password protection</h3>
+      <p>You may set an optional password in the gear menu to restrict remote control access. This password is stored locally on your iPad using <code>UserDefaults</code>. The iPhone companion sends the password you type in the connection prompt — this exchange happens only between your two devices on your private local network or Bluetooth connection. The developer never receives or has access to this password.</p>
+    </div>
+  </div>
+ 
+  <!-- ══ PERMISSIONS ══ -->
+  <div id="permissions">
+    <div class="section-head">
+      <h2>Device Permissions</h2>
+      <span class="tag">Permissions</span>
+    </div>
+ 
+    <div class="info-box blue">
+      <span class="info-box-icon">ℹ️</span>
+      <span>CueSuite requests only the permissions it needs for core functionality. You can review and revoke any permission at any time in your iPad's Settings app.</span>
+    </div>
+ 
+    <div class="policy-section">
+      <h3>Media Library access</h3>
+      <p>CueSuite requests access to your Music Library so you can select songs from your Apple Music or iTunes library as cue sources. This permission is used only at the moment you choose a track — the app does not read, scan, or index your library in the background.</p>
+    </div>
+ 
+    <div class="policy-section">
+      <h3>File access</h3>
+      <p>When you select an audio file from the Files app, iOS grants CueSuite a security-scoped bookmark to that specific file. This allows the app to access and play the file without requiring broad access to your entire file system. Only files you explicitly select are ever accessed.</p>
+    </div>
+ 
+    <div class="policy-section">
+      <h3>Audio session</h3>
+      <p>CueSuite configures an <code>AVAudioSession</code> in playback mode so that audio plays reliably through the speaker even when the device's Silent switch is engaged. This is standard practice for live performance audio apps and does not involve any data collection.</p>
+    </div>
+ 
+    <div class="policy-section">
+      <h3>Now Playing / Remote Controls</h3>
+      <p>The app registers with the iOS Now Playing system so that the currently playing cue's title appears on the lock screen and in Control Center, and so that hardware media controls can pause and resume playback. No personal information is involved in this feature.</p>
+    </div>
+ 
+    <div class="policy-section">
+      <h3>Local Network access</h3>
+      <p>CueSuite requests Local Network access so that it can advertise itself via Bonjour and accept incoming TCP connections from CueSuite Mobile on the same Wi-Fi network. This permission is used solely for the optional companion remote-control feature. CueSuite does not access any other device on your network and does not make any outbound connections to the internet.</p>
+    </div>
+ 
+    <div class="policy-section">
+      <h3>Bluetooth</h3>
+      <p>CueSuite requests Bluetooth access to advertise itself as a Bluetooth LE peripheral so that CueSuite Mobile can connect wirelessly without Wi-Fi. Bluetooth is used solely for the optional companion feature. No Bluetooth data is sent to any third party.</p>
+    </div>
+  </div>
+ 
+  <!-- ══ THIRD PARTY ══ -->
+  <div id="third-party">
+    <div class="section-head">
+      <h2>Third-Party Services</h2>
+      <span class="tag">Third Parties</span>
+    </div>
+ 
+    <div class="policy-section">
+      <h3>Apple frameworks</h3>
+      <p>CueSuite uses standard Apple system frameworks including <strong>AVFoundation</strong>, <strong>MediaPlayer</strong>, <strong>MusicKit</strong>, <strong>Network</strong>, and <strong>CoreBluetooth</strong>. When you use the Music Library picker or play a track via Apple Music, your interactions with that content are subject to <a href="https://www.apple.com/legal/privacy/" target="_blank" rel="noopener">Apple's Privacy Policy</a>.</p>
+      <p>CueSuite does not integrate any third-party analytics SDKs, advertising networks, or data brokers.</p>
+    </div>
+ 
+    <div class="policy-section">
+      <h3>Apple App Store</h3>
+      <p>CueSuite is distributed through the Apple App Store. Apple may collect certain information about your app download and purchase in accordance with their own privacy practices. Please review <a href="https://www.apple.com/legal/privacy/" target="_blank" rel="noopener">Apple's Privacy Policy</a> for details on what Apple collects.</p>
+    </div>
+  </div>
+ 
+  <!-- ══ CHILDREN ══ -->
+  <div id="children">
+    <div class="section-head">
+      <h2>Children's Privacy</h2>
+      <span class="tag">Children</span>
+    </div>
+ 
+    <div class="policy-section">
+      <h3>Under 13</h3>
+      <p>CueSuite does not knowingly collect any personal information from children under the age of 13. Because the app collects no personal data from any user, it presents no particular risk to younger users. However, the app is not specifically directed at children.</p>
+      <p>If you believe a child has provided personal information through the app in a manner not described here, please contact us at the address below and we will investigate promptly.</p>
+    </div>
+  </div>
+ 
+  <!-- ══ CHANGES ══ -->
+  <div id="changes">
+    <div class="section-head">
+      <h2>Changes to This Policy</h2>
+      <span class="tag">Updates</span>
+    </div>
+ 
+    <div class="policy-section">
+      <h3>How we notify you</h3>
+      <p>If we make material changes to this Privacy Policy, we will update the "Last updated" date at the top of this page and, where appropriate, provide notice through an App Store update description.</p>
+      <p>We encourage you to review this page periodically. Continued use of CueSuite after changes are posted constitutes acceptance of the updated policy.</p>
+    </div>
+  </div>
+ 
+  <!-- ══ CONTACT ══ -->
+  <div id="contact">
+    <div class="section-head">
+      <h2>Contact Us</h2>
+      <span class="tag">Get in Touch</span>
+    </div>
+ 
+    <div class="policy-section">
+      <h3>Privacy questions</h3>
+      <p>If you have questions or concerns about this Privacy Policy or about how CueSuite handles data, please contact us:</p>
+      <p>
+        <strong>Email:</strong> <a href="mailto:privacy@cornerstonelabs.info">privacy@cornerstonelabs.info</a><br>
+        <strong>Support:</strong> <a href="CueSuite-Support.html">CueSuite Support Page</a>
+      </p>
+      <p>We will do our best to respond to all privacy inquiries within 5 business days.</p>
+    </div>
+  </div>
+ 
+</div>
+ 
+<!-- ── FOOTER ── -->
+<footer>
+  <nav>
+    <ul class="nav-links">
+      <li><a href="CueSuite-Support.html">Support</a></li>
+      <li><a href="#data">Data</a></li>
+      <li><a href="#networking">Networking</a></li>
+      <li><a href="#permissions">Permissions</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+  <div class="footer-copy">
+    © 2025–2026 CueSuite &nbsp;·&nbsp; All rights reserved
+  </div>
+</footer>
+ 
+</body>
+</html>
     /* ── NAV ── */
     nav {
       position: sticky;
