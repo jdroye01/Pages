@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>CueSuite Mobile UI Demo</title>
+<style>
+:root{
+  --bg:#121217;
+  --card:#1e1e26;
+  --card2:#2a2a36;
+  --blue:#4c8dff;
+  --green:#2ecc71;
+  --red:#ff4d4d;
+  --purple:#b56cff;
+  --text:#e8e8f0;
+  --muted:#9aa0b4;
+  --orange:#ff9f43;
+}
+
+*{box-sizing:border-box;font-family:system-ui,-apple-system,Segoe UI,Roboto;}
+body{margin:0;background:var(--bg);color:var(--text);display:flex;justify-content:center;}
+.app{width:420px;max-width:100%;padding:16px;}
+
+/* connection */
+.bar{
+  background:var(--card2);
+  border-radius:14px;
+  padding:10px 14px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  animation:fadeIn .5s ease;
+}
+.dot{
+  width:10px;height:10px;border-radius:50%;background:var(--red);
+  margin-right:8px;
+  transition:.3s;
+}
+.bar-left{display:flex;align-items:center;gap:8px;}
+.btn{color:var(--blue);cursor:pointer;font-weight:600;font-size:13px;}
+
+/* now playing */
+.card{
+  margin-top:12px;
+  background:var(--card2);
+  border-radius:18px;
+  padding:16px;
+  animation:slideUp .6s ease;
+}
+.live{
+  display:inline-block;
+  background:var(--red);
+  padding:2px 8px;
+  border-radius:6px;
+  font-size:11px;
+  font-weight:700;
+  animation:pulse 1.2s infinite;
+}
+.title{font-size:22px;font-weight:700;margin-top:8px;}
+.sub{color:var(--orange);font-size:13px;margin-top:4px;}
+
+.progress{
+  height:6px;
+  background:#333;
+  border-radius:10px;
+  margin-top:12px;
+  overflow:hidden;
+}
+.fill{
+  height:100%;width:30%;background:var(--blue);
+  animation:load 3s infinite ease-in-out;
+}
+.time{
+  display:flex;justify-content:space-between;
+  font-size:12px;color:var(--muted);
+  margin-top:6px;
+}
+
+.next{margin-top:10px;color:var(--muted);font-size:13px;}
+
+/* transport */
+.transport{
+  display:flex;justify-content:center;align-items:center;
+  gap:16px;margin-top:16px;
+}
+.btn-circle{
+  border-radius:50%;display:flex;justify-content:center;align-items:center;
+  cursor:pointer;user-select:none;
+  transition:.2s;
+}
+.play{width:72px;height:72px;background:var(--blue);animation:float 2s infinite ease-in-out;}
+.small{width:56px;height:56px;background:#444;}
+.small.orange{background:var(--orange);}
+
+/* markers */
+.section-title{margin-top:18px;color:var(--muted);font-size:11px;}
+.marker{
+  background:var(--purple);
+  padding:10px 14px;
+  border-radius:10px;
+  margin-top:8px;
+  font-size:14px;
+  opacity:0;
+  transform:translateY(10px);
+  animation:pop .5s forwards;
+}
+.marker:nth-child(2){animation-delay:.1s}
+.marker:nth-child(3){animation-delay:.2s}
+.marker:nth-child(4){animation-delay:.3s}
+
+/* cues */
+.cue{
+  background:var(--card2);
+  margin-top:10px;
+  padding:12px;
+  border-radius:12px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  transition:.2s;
+}
+.cue:hover{transform:scale(1.02);}
+.active{border-left:4px solid var(--blue);}
+.badge{
+  background:var(--purple);
+  padding:4px 10px;
+  border-radius:10px;
+  font-size:12px;
+}
+
+/* animations */
+@keyframes pulse{
+  0%,100%{opacity:1}
+  50%{opacity:.4}
+}
+@keyframes load{
+  0%{width:10%}
+  50%{width:80%}
+  100%{width:30%}
+}
+@keyframes float{
+  0%,100%{transform:translateY(0)}
+  50%{transform:translateY(-4px)}
+}
+@keyframes fadeIn{
+  from{opacity:0;transform:translateY(-6px)}
+  to{opacity:1;transform:translateY(0)}
+}
+@keyframes slideUp{
+  from{opacity:0;transform:translateY(12px)}
+  to{opacity:1;transform:translateY(0)}
+}
+@keyframes pop{
+  to{opacity:1;transform:translateY(0)}
+}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <div class="bar">
+    <div class="bar-left">
+      <div class="dot" id="dot"></div>
+      <div id="conn">Not connected</div>
+    </div>
+    <div class="btn" onclick="toggleConn()">Connect</div>
+  </div>
+
+  <div class="card">
+    <div class="live" id="live" style="display:none">LIVE</div>
+    <div class="title" id="cue">No cue playing</div>
+    <div class="sub" id="marker"> </div>
+
+    <div class="progress"><div class="fill"></div></div>
+    <div class="time"><span>0:00</span><span>-2:34</span></div>
+    <div class="next">Next: Opening Song</div>
+  </div>
+
+  <div class="transport">
+    <div class="btn-circle small">■</div>
+    <div class="btn-circle play" onclick="togglePlay()">▶</div>
+    <div class="btn-circle small orange">⟲</div>
+  </div>
+
+  <div class="section-title">MARKERS</div>
+  <div id="markers">
+    <div class="marker">Intro 0:00 → 0:30</div>
+    <div class="marker">Verse 0:30 → 1:10</div>
+    <div class="marker">Chorus 1:10 → 2:00</div>
+  </div>
+
+  <div class="section-title">ALL CUES</div>
+
+  <div class="cue active">
+    <div>Opening Song</div>
+    <div class="badge">3 markers</div>
+  </div>
+
+  <div class="cue">
+    <div>Worship Set</div>
+    <div class="badge">5 markers</div>
+  </div>
+
+  <div class="cue">
+    <div>Sermon</div>
+    <div class="badge">1 marker</div>
+  </div>
+
+</div>
+
+<script>
+let connected=false;
+let playing=false;
+
+function toggleConn(){
+  connected=!connected;
+  document.getElementById('dot').style.background=connected?'var(--green)':'var(--red)';
+  document.getElementById('conn').innerText=connected?'Connected to CueSuite':'Not connected';
+}
+
+function togglePlay(){
+  playing=!playing;
+  document.getElementById('live').style.display=playing?'inline-block':'none';
+  document.getElementById('cue').innerText=playing?'Opening Song':'No cue playing';
+}
+</script>
+
+</body>
+</html>
