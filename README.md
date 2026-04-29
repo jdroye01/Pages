@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Cornerstone Labs</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet"/>
+
+<style>
+:root {
+  --bg: #09090b;
+  --bg2: #101114;
+  --panel: #16181d;
+  --border: rgba(255,255,255,0.08);
+  --gold: #c9a84c;
+  --gold2: #ecd287;
+  --text: #ebe6dd;
+  --muted: #8e8a83;
+  --green: #2ea87e;
+  --blue: #4b8ef0;
+  --radius: 22px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; background: var(--bg); }
+
+body {
+  font-family: 'Syne', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.7;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.25;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+}
+
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(9,9,11,0.88);
+  backdrop-filter: blur(18px);
+  border-bottom: 1px solid var(--border);
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.nav-brand {
+  text-decoration: none;
+  color: var(--text);
+  font-family: 'Playfair Display', serif;
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+.nav-brand em {
+  color: var(--gold2);
+  font-style: italic;
+}
+
+.nav-links {
+  display: flex;
+  gap: 0.4rem;
+  list-style: none;
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: var(--muted);
+  font-size: 0.82rem;
+  font-weight: 700;
+  padding: 0.45rem 0.85rem;
+  border-radius: 999px;
+  transition: 0.2s;
+}
+
+.nav-links a:hover {
+  color: var(--text);
+  background: rgba(255,255,255,0.05);
+}
+
+.hero {
+  padding: 7rem 2rem 5rem;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(201,168,76,0.12), transparent 55%),
+    radial-gradient(circle at 20% 80%, rgba(46,168,126,0.08), transparent 45%),
+    radial-gradient(circle at 80% 80%, rgba(75,142,240,0.08), transparent 45%);
+}
+
+.hero-inner {
+  position: relative;
+  z-index: 1;
+  max-width: 850px;
+  margin: 0 auto;
+}
+
+.eyebrow {
+  display: inline-block;
+  border: 1px solid rgba(201,168,76,0.2);
+  color: var(--gold);
+  padding: 0.4rem 1rem;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  margin-bottom: 1.5rem;
+}
+
+h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2.8rem, 6vw, 5rem);
+  line-height: 1.02;
+  margin-bottom: 1.2rem;
+}
+
+h1 em {
+  display: block;
+  color: var(--gold2);
+  font-style: italic;
+}
+
+.hero p {
+  max-width: 650px;
+  margin: 0 auto 2rem;
+  color: var(--muted);
+  font-size: 1.05rem;
+}
+
+.hero-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.btn {
+  text-decoration: none;
+  padding: 0.9rem 1.4rem;
+  border-radius: 14px;
+  font-weight: 700;
+  font-size: 0.9rem;
+  transition: 0.2s;
+}
+
+.btn-primary {
+  background: rgba(201,168,76,0.12);
+  border: 1px solid rgba(201,168,76,0.2);
+  color: var(--gold2);
+}
+
+.btn-secondary {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--border);
+  color: var(--text);
+}
+
+.btn:hover { transform: translateY(-2px); }
+
+.section {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 5rem 2rem;
+}
+
+.section-label {
+  color: var(--gold);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  margin-bottom: 0.7rem;
+}
+
+.section h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2rem, 4vw, 3rem);
+  margin-bottom: 1rem;
+}
+
+.section h2 em {
+  color: var(--gold2);
+  font-style: italic;
+}
+
+.section p {
+  color: var(--muted);
+  max-width: 760px;
+}
+
+.grid {
+  margin-top: 2rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1rem;
+}
+
+.card {
+  background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 1.4rem;
+}
+
+.card h3 {
+  margin-bottom: 0.6rem;
+  font-size: 1rem;
+}
+
+.card p {
+  font-size: 0.9rem;
+}
+
+.card a {
+  display: inline-block;
+  margin-top: 1rem;
+  color: var(--gold2);
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 0.85rem;
+}
+
+.footer {
+  border-top: 1px solid var(--border);
+  background: var(--bg2);
+  text-align: center;
+  padding: 3rem 2rem;
+}
+
+.footer-brand {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.footer-brand em {
+  color: var(--gold2);
+  font-style: italic;
+}
+
+.footer p {
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+@media (max-width: 700px) {
+  .nav-links { display: none; }
+}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="index.html" class="nav-brand">Cornerstone<em>Labs</em></a>
+  <ul class="nav-links">
+    <li><a href="#platforms">Platforms</a></li>
+    <li><a href="#resources">Resources</a></li>
+    <li><a href="#guides">Guides</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<section class="hero">
+  <div class="hero-inner">
+    <div class="eyebrow">Technology + Systems</div>
+    <h1>Cornerstone Labs<br><em>Operations & Solutions</em></h1>
+    <p>
+      Building practical tools, church systems, streaming infrastructure, mobile applications, and operational guides that make complex systems simple to run.
+    </p>
+
+    <div class="hero-actions">
+      <a href="#platforms" class="btn btn-primary">Explore Platforms</a>
+      <a href="#guides" class="btn btn-secondary">View Documentation</a>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="platforms">
+  <div class="section-label">Section 1</div>
+  <h2>Featured <em>Platforms</em></h2>
+  <p>Main systems and tools currently available across Cornerstone Labs.</p>
+
+  <div class="grid">
+    <div class="card">
+      <h3>ChurchScore Live</h3>
+      <p>Member tracking, attendance, point systems, reporting, and synced iPad operations for church administration.</p>
+      <a href="ChurchScore-Live-Demo.html">Open Guide →</a>
+    </div>
+
+    <div class="card">
+      <h3>Streaming Systems</h3>
+      <p>Production workflows for livestreaming, audio routing, remote mixing, and multi-platform church broadcasting.</p>
+      <a href="#">View Resources →</a>
+    </div>
+
+    <div class="card">
+      <h3>CueSuite + CueSuite Mobile</h3>
+      <p>Production cue management, live stage communication, remote cue access, and workflow tools for technical teams.</p>
+      <a href="#">Open Platform →</a>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="resources">
+  <div class="section-label">Section 2</div>
+  <h2>System <em>Resources</em></h2>
+  <p>Reference pages, operational notes, setup documents, and implementation standards for daily use.</p>
+</section>
+
+<section class="section" id="guides">
+  <div class="section-label">Section 3</div>
+  <h2>Documentation <em>Hub</em></h2>
+  <p>
+    Use this homepage as the central navigation point for your GitHub Pages site.
+    Add new pages here as your guides grow.
+  </p>
+</section>
+
+<section class="section" id="contact">
+  <div class="section-label">Section 4</div>
+  <h2>Built for <em>Reliable Operations</em></h2>
+  <p>
+    Designed for systems that need to work every week — not just look good once.
+    Practical documentation. Clean workflows. Stable infrastructure.
+  </p>
+</section>
+
+<footer class="footer">
+  <div class="footer-brand">Cornerstone<em>Labs</em></div>
+  <p>cornerstonelabs.info • GitHub Pages Home</p>
+</footer>
+
+</body>
+</html>
