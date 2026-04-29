@@ -1,0 +1,1349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>ChurchScore Live — How-To Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --bg: #09090b;
+  --bg2: #101114;
+  --panel: #16181d;
+  --panel2: #1d2128;
+  --border: rgba(255,255,255,0.08);
+  --gold: #c9a84c;
+  --gold2: #ecd287;
+  --cream: #f4efe6;
+  --blue: #4b8ef0;
+  --blue2: #7caef8;
+  --green: #2ea87e;
+  --green2: #51c997;
+  --purple: #8d6ad3;
+  --orange: #df8a41;
+  --red: #d95b5b;
+  --text: #ebe6dd;
+  --muted: #8e8a83;
+  --radius: 22px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; background: var(--bg); }
+
+body {
+  font-family: 'Syne', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  overflow-x: hidden;
+  line-height: 1.7;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.3;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+}
+
+/* ── NAV ── */
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(9,9,11,0.88);
+  backdrop-filter: blur(18px);
+  border-bottom: 1px solid var(--border);
+  padding: 0.85rem 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.nav-brand {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text);
+  text-decoration: none;
+  letter-spacing: -0.01em;
+}
+
+.nav-brand em { font-style: italic; color: var(--gold2); }
+
+.nav-links {
+  display: flex;
+  gap: 0.2rem;
+  list-style: none;
+  flex-wrap: wrap;
+}
+
+.nav-links a {
+  font-size: 0.78rem;
+  color: var(--muted);
+  text-decoration: none;
+  padding: 0.4rem 0.8rem;
+  border-radius: 999px;
+  transition: color 0.15s, background 0.15s;
+  font-weight: 600;
+}
+
+.nav-links a:hover { color: var(--text); background: rgba(255,255,255,0.06); }
+
+/* ── HERO ── */
+.guide-hero {
+  padding: 6rem 2rem 4rem;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.guide-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 60% 50% at 50% 0%, rgba(201,168,76,0.1) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 40% at 20% 80%, rgba(46,168,126,0.07) 0%, transparent 55%),
+    radial-gradient(ellipse 40% 40% at 80% 80%, rgba(75,142,240,0.07) 0%, transparent 55%);
+}
+
+.guide-hero-inner { position: relative; z-index: 1; max-width: 780px; margin: 0 auto; }
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  font-size: 0.72rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--gold);
+  border: 1px solid rgba(201,168,76,0.25);
+  border-radius: 999px;
+  padding: 0.38rem 1rem;
+  margin-bottom: 1.8rem;
+}
+
+.eyebrow::before {
+  content: "";
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--gold);
+  animation: pulse-dot 2s ease infinite;
+}
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+.guide-hero h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2.6rem, 6vw, 4.5rem);
+  line-height: 1.0;
+  letter-spacing: -0.03em;
+  margin-bottom: 1.2rem;
+}
+
+.guide-hero h1 em { font-style: italic; color: var(--gold2); display: block; }
+
+.guide-hero p {
+  color: var(--muted);
+  font-size: 1.05rem;
+  max-width: 560px;
+  margin: 0 auto 2rem;
+  line-height: 1.8;
+}
+
+/* ── TOC ── */
+.toc-band {
+  background: var(--bg2);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  padding: 2rem;
+}
+
+.toc-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.toc-label {
+  font-size: 0.68rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 1.1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.toc-label::before { content: ""; width: 18px; height: 1px; background: var(--gold); }
+
+.toc-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 0.6rem;
+}
+
+.toc-link {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.65rem 0.85rem;
+  border-radius: 12px;
+  background: rgba(255,255,255,0.025);
+  border: 1px solid rgba(255,255,255,0.06);
+  color: var(--muted);
+  text-decoration: none;
+  font-size: 0.82rem;
+  font-weight: 600;
+  transition: all 0.18s ease;
+}
+
+.toc-link:hover {
+  color: var(--gold2);
+  background: rgba(201,168,76,0.07);
+  border-color: rgba(201,168,76,0.18);
+  transform: translateX(3px);
+}
+
+.toc-num {
+  width: 22px; height: 22px;
+  border-radius: 7px;
+  background: rgba(201,168,76,0.12);
+  color: var(--gold);
+  font-size: 0.6rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+/* ── MAIN LAYOUT ── */
+.guide-body {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 4rem 2rem 8rem;
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  gap: 3rem;
+  align-items: start;
+}
+
+.guide-sidebar {
+  position: sticky;
+  top: 72px;
+}
+
+.sidebar-nav { list-style: none; }
+
+.sidebar-nav li { margin-bottom: 2px; }
+
+.sidebar-nav a {
+  display: block;
+  padding: 0.5rem 0.75rem;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--muted);
+  text-decoration: none;
+  transition: all 0.15s ease;
+  border-left: 2px solid transparent;
+}
+
+.sidebar-nav a:hover,
+.sidebar-nav a.active {
+  color: var(--gold2);
+  background: rgba(201,168,76,0.07);
+  border-left-color: var(--gold);
+}
+
+.sidebar-section {
+  font-size: 0.62rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(142,138,131,0.5);
+  padding: 0.75rem 0.75rem 0.3rem;
+  margin-top: 0.5rem;
+}
+
+/* ── CONTENT ── */
+.guide-content { min-width: 0; }
+
+.guide-section {
+  margin-bottom: 5rem;
+  scroll-margin-top: 80px;
+}
+
+.section-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 0.6rem;
+}
+
+.section-label::before { content: ""; width: 18px; height: 1px; background: var(--gold); }
+
+.guide-section h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  margin-bottom: 0.9rem;
+}
+
+.guide-section h2 em { font-style: italic; color: var(--gold2); }
+
+.guide-section h3 {
+  font-size: 1.05rem;
+  font-weight: 800;
+  margin: 2rem 0 0.65rem;
+  color: var(--text);
+}
+
+.guide-section h4 {
+  font-size: 0.88rem;
+  font-weight: 800;
+  color: var(--gold);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin: 1.5rem 0 0.5rem;
+}
+
+.guide-section p {
+  color: var(--muted);
+  line-height: 1.85;
+  font-size: 0.97rem;
+  margin-bottom: 0.85rem;
+}
+
+.guide-section p strong { color: var(--text); font-weight: 700; }
+
+/* ── CONCEPT CARDS ── */
+.concept-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 0.85rem;
+  margin: 1.5rem 0;
+}
+
+.concept-card {
+  background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 1.2rem;
+  transition: transform 0.2s ease, border-color 0.2s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.concept-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(201,168,76,0.2);
+}
+
+.concept-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(120deg, rgba(201,168,76,0.06), transparent 50%);
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.concept-card:hover::before { opacity: 1; }
+
+.concept-icon {
+  font-size: 1.4rem;
+  margin-bottom: 0.65rem;
+  display: block;
+}
+
+.concept-name {
+  font-size: 0.88rem;
+  font-weight: 800;
+  margin-bottom: 0.4rem;
+}
+
+.concept-desc {
+  color: var(--muted);
+  font-size: 0.78rem;
+  line-height: 1.6;
+}
+
+/* ── STEP LIST ── */
+.step-list { list-style: none; margin: 1rem 0 1.5rem; }
+
+.step-list li {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+
+.step-list li:last-child { border-bottom: none; }
+
+.step-num {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  background: rgba(201,168,76,0.14);
+  color: var(--gold2);
+  font-size: 0.72rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.step-text {
+  color: var(--muted);
+  font-size: 0.93rem;
+  line-height: 1.65;
+  flex: 1;
+}
+
+.step-text strong { color: var(--text); }
+
+/* ── BULLET LIST ── */
+.guide-list { list-style: none; margin: 0.5rem 0 1.2rem; }
+
+.guide-list li {
+  display: flex;
+  gap: 0.7rem;
+  align-items: flex-start;
+  padding: 0.38rem 0;
+  color: var(--muted);
+  font-size: 0.93rem;
+  line-height: 1.6;
+}
+
+.guide-list li::before {
+  content: "—";
+  color: var(--gold);
+  font-weight: 700;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.guide-list li strong { color: var(--text); }
+
+/* ── INFO BOXES ── */
+.info-box {
+  border-radius: 14px;
+  padding: 1.1rem 1.4rem;
+  margin: 1.2rem 0;
+  display: flex;
+  gap: 0.9rem;
+  font-size: 0.9rem;
+  line-height: 1.7;
+}
+
+.info-box-icon { font-size: 1.1rem; flex-shrink: 0; margin-top: 1px; }
+.info-box-body { color: var(--muted); }
+.info-box-body strong { color: var(--text); font-weight: 700; }
+
+.info-box.gold   { background: rgba(201,168,76,0.07);   border: 1px solid rgba(201,168,76,0.18); }
+.info-box.green  { background: rgba(46,168,126,0.07);   border: 1px solid rgba(46,168,126,0.18); }
+.info-box.blue   { background: rgba(75,142,240,0.07);   border: 1px solid rgba(75,142,240,0.18); }
+.info-box.red    { background: rgba(217,91,91,0.07);    border: 1px solid rgba(217,91,91,0.18);  }
+.info-box.orange { background: rgba(223,138,65,0.07);   border: 1px solid rgba(223,138,65,0.18); }
+
+/* ── CODE BLOCK ── */
+.code-block {
+  background: #0d1117;
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 12px;
+  padding: 1rem 1.2rem;
+  margin: 1rem 0;
+  overflow-x: auto;
+}
+
+.code-block pre {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.82rem;
+  line-height: 1.7;
+  color: #c9d1d9;
+}
+
+.code-block .comment { color: #6e7681; }
+.code-block .header  { color: var(--gold2); font-weight: 600; }
+.code-block .value   { color: var(--green2); }
+
+/* ── TABLE ── */
+.guide-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.2rem 0;
+  font-size: 0.88rem;
+}
+
+.guide-table thead {
+  background: rgba(255,255,255,0.03);
+}
+
+.guide-table th {
+  padding: 0.75rem 1rem;
+  text-align: left;
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  border-bottom: 1px solid var(--border);
+}
+
+.guide-table td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  color: var(--muted);
+  vertical-align: top;
+  line-height: 1.55;
+}
+
+.guide-table td:first-child { color: var(--text); font-weight: 700; }
+.guide-table tr:last-child td { border-bottom: none; }
+.guide-table tr { transition: background 0.15s; }
+.guide-table tr:hover td { background: rgba(255,255,255,0.02); }
+
+/* ── TAG CHIPS ── */
+.tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.22rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+}
+
+.tag.gold   { background: rgba(201,168,76,0.14); color: var(--gold2); border: 1px solid rgba(201,168,76,0.2); }
+.tag.green  { background: rgba(46,168,126,0.14); color: var(--green2); border: 1px solid rgba(46,168,126,0.2); }
+.tag.blue   { background: rgba(75,142,240,0.14); color: var(--blue2); border: 1px solid rgba(75,142,240,0.2); }
+.tag.red    { background: rgba(217,91,91,0.14);  color: #f08080; border: 1px solid rgba(217,91,91,0.2); }
+
+/* ── DIVIDER ── */
+.guide-divider {
+  border: none;
+  border-top: 1px solid rgba(255,255,255,0.06);
+  margin: 3.5rem 0;
+}
+
+/* ── CHECKLIST ── */
+.checklist {
+  list-style: none;
+  margin: 0.75rem 0 1.2rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 0.5rem;
+}
+
+.checklist li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.65rem;
+  background: rgba(255,255,255,0.025);
+  border: 1px solid rgba(255,255,255,0.05);
+  border-radius: 10px;
+  padding: 0.65rem 0.85rem;
+  color: var(--muted);
+  font-size: 0.88rem;
+  line-height: 1.5;
+}
+
+.checklist li::before {
+  content: "✓";
+  color: var(--green2);
+  font-weight: 800;
+  font-size: 0.75rem;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+/* ── TROUBLESHOOT ── */
+.trouble-block {
+  background: linear-gradient(180deg, rgba(255,255,255,0.025), rgba(255,255,255,0.01));
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 1.4rem;
+  margin-bottom: 1rem;
+  transition: border-color 0.2s;
+}
+
+.trouble-block:hover { border-color: rgba(201,168,76,0.2); }
+
+.trouble-problem {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.7rem;
+  margin-bottom: 0.9rem;
+}
+
+.trouble-badge {
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+  font-size: 0.62rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  background: rgba(217,91,91,0.14);
+  color: #f08080;
+  border: 1px solid rgba(217,91,91,0.2);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.trouble-title { font-size: 0.93rem; font-weight: 700; color: var(--text); }
+
+.trouble-causes {
+  font-size: 0.82rem;
+  color: var(--muted);
+  margin-bottom: 0.75rem;
+  line-height: 1.6;
+}
+
+.trouble-fix { border-top: 1px solid rgba(255,255,255,0.05); padding-top: 0.8rem; }
+
+.trouble-fix-label {
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--green2);
+  margin-bottom: 0.4rem;
+}
+
+/* ── REVEAL ANIMATION ── */
+.reveal {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 0.55s ease, transform 0.55s ease;
+}
+
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── FOOTER ── */
+.footer {
+  text-align: center;
+  padding: 3.5rem 2rem;
+  border-top: 1px solid var(--border);
+  background: var(--bg2);
+}
+
+.footer-brand {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 0.6rem;
+}
+
+.footer-brand em { font-style: italic; color: var(--gold2); }
+
+.footer-sub {
+  color: var(--muted);
+  font-size: 0.88rem;
+  max-width: 480px;
+  margin: 0 auto;
+  line-height: 1.75;
+}
+
+@media (max-width: 800px) {
+  .guide-body { grid-template-columns: 1fr; }
+  .guide-sidebar { display: none; }
+  .concept-grid { grid-template-columns: repeat(2, 1fr); }
+  .checklist { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 600px) {
+  .nav-links { display: none; }
+  .toc-grid { grid-template-columns: 1fr; }
+  .concept-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <a class="nav-brand" href="ChurchScore-Live-Demo.html">Church<em>Score Live</em></a>
+  <ul class="nav-links">
+    <li><a href="#overview">Overview</a></li>
+    <li><a href="#members">Members</a></li>
+    <li><a href="#points">Points</a></li>
+    <li><a href="#reports">Reports</a></li>
+    <li><a href="#settings">Settings</a></li>
+    <li><a href="#import">Import</a></li>
+    <li><a href="#troubleshooting">Help</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<div class="guide-hero">
+  <div class="guide-hero-inner">
+    <div class="eyebrow">Operational Manual</div>
+    <h1>ChurchScore Live<br><em>How-To Guide</em></h1>
+    <p>A detailed reference for setup, daily operations, imports, sync, reporting, and troubleshooting — built directly from the app's current code behavior.</p>
+  </div>
+</div>
+
+<!-- TOC -->
+<div class="toc-band">
+  <div class="toc-inner">
+    <div class="toc-label">Contents</div>
+    <div class="toc-grid">
+      <a class="toc-link" href="#overview"><span class="toc-num">1</span>App Overview & Concepts</a>
+      <a class="toc-link" href="#members"><span class="toc-num">2</span>Members Tab</a>
+      <a class="toc-link" href="#member-detail"><span class="toc-num">3</span>Member Detail Screen</a>
+      <a class="toc-link" href="#reports"><span class="toc-num">4</span>Reports Tab</a>
+      <a class="toc-link" href="#points"><span class="toc-num">5</span>Points Tab</a>
+      <a class="toc-link" href="#settings"><span class="toc-num">6</span>Settings</a>
+      <a class="toc-link" href="#sync"><span class="toc-num">7</span>Live Sync</a>
+      <a class="toc-link" href="#import"><span class="toc-num">8</span>Import Guide</a>
+      <a class="toc-link" href="#workflows"><span class="toc-num">9</span>Workflows</a>
+      <a class="toc-link" href="#troubleshooting"><span class="toc-num">10</span>Troubleshooting</a>
+      <a class="toc-link" href="#checklist"><span class="toc-num">11</span>Admin Checklist</a>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="guide-body">
+
+  <!-- SIDEBAR -->
+  <aside class="guide-sidebar">
+    <ul class="sidebar-nav">
+      <li class="sidebar-section">Getting Started</li>
+      <li><a href="#overview">Overview</a></li>
+      <li><a href="#startup">Startup Behavior</a></li>
+      <li class="sidebar-section">Tabs</li>
+      <li><a href="#members">Members</a></li>
+      <li><a href="#member-detail">Member Detail</a></li>
+      <li><a href="#reports">Reports</a></li>
+      <li><a href="#points">Points</a></li>
+      <li class="sidebar-section">Configuration</li>
+      <li><a href="#settings">Settings</a></li>
+      <li><a href="#sync">Live Sync</a></li>
+      <li class="sidebar-section">Data</li>
+      <li><a href="#import">Import Guide</a></li>
+      <li><a href="#import-csv">CSV Rules</a></li>
+      <li><a href="#import-excel">Excel Rules</a></li>
+      <li><a href="#import-caveats">Caveats</a></li>
+      <li class="sidebar-section">Operations</li>
+      <li><a href="#workflows">Workflows</a></li>
+      <li><a href="#troubleshooting">Troubleshooting</a></li>
+      <li><a href="#checklist">Admin Checklist</a></li>
+    </ul>
+  </aside>
+
+  <!-- CONTENT -->
+  <main class="guide-content">
+
+    <!-- OVERVIEW -->
+    <div class="guide-section reveal" id="overview">
+      <div class="section-label">Section 1</div>
+      <h2>App Overview &amp; <em>Core Concepts</em></h2>
+      <p>ChurchScore is a SwiftUI iOS application for tracking church members, assigning them to classes, awarding points for activities, viewing individual member progress, importing data, and generating reports. The main app opens to a splash screen and then shows four tabs.</p>
+
+      <div class="concept-grid">
+        <div class="concept-card">
+          <span class="concept-icon">🏫</span>
+          <div class="concept-name">Classes</div>
+          <div class="concept-desc">Group labels like Youth, Adults, Men, Women, Choir. Used in rosters, point-awarding, and reports.</div>
+        </div>
+        <div class="concept-card">
+          <span class="concept-icon">👤</span>
+          <div class="concept-name">Members</div>
+          <div class="concept-desc">Each member has a unique ID, name, class assignment, and an optional local profile photo.</div>
+        </div>
+        <div class="concept-card">
+          <span class="concept-icon">⭐</span>
+          <div class="concept-name">Actions</div>
+          <div class="concept-desc">Activities that earn points — Attendance, Bible verse, Inviting a guest. Each has a name and point value.</div>
+        </div>
+        <div class="concept-card">
+          <span class="concept-icon">📋</span>
+          <div class="concept-name">Point Records</div>
+          <div class="concept-desc">Created when points are awarded. Stores member ID, action ID, point value, and date awarded.</div>
+        </div>
+        <div class="concept-card">
+          <span class="concept-icon">🏅</span>
+          <div class="concept-name">Tiers</div>
+          <div class="concept-desc">Milestone labels like Bronze, Silver, Gold. Each tier has a point threshold. Members earn the highest tier they qualify for.</div>
+        </div>
+      </div>
+
+      <div id="startup">
+        <h3>Startup Behavior</h3>
+        <p>When the app launches, these steps happen in order:</p>
+        <ol class="step-list">
+          <li><span class="step-num">1</span><span class="step-text">A splash screen appears for approximately <strong>2.5 seconds</strong>.</span></li>
+          <li><span class="step-num">2</span><span class="step-text">If Server Mode is enabled, the app <strong>attempts to connect</strong> to the configured sync server.</span></li>
+          <li><span class="step-num">3</span><span class="step-text">If a server URL is configured, the app <strong>triggers a full sync pull</strong> from the server.</span></li>
+          <li><span class="step-num">4</span><span class="step-text">The <strong>main tab view</strong> opens. A synced installation may refresh its local database shortly after launch.</span></li>
+        </ol>
+      </div>
+    </div>
+
+    <hr class="guide-divider"/>
+
+    <!-- MEMBERS TAB -->
+    <div class="guide-section reveal" id="members">
+      <div class="section-label">Section 2</div>
+      <h2>Members <em>Tab</em></h2>
+      <p>The Members tab is the roster view. It shows all members for the currently selected class with their lifetime point totals.</p>
+
+      <h3>What You See</h3>
+      <ul class="guide-list">
+        <li>A <strong>class picker</strong> at the top</li>
+        <li>A <strong>list of members</strong> in the selected class</li>
+        <li>Each member's <strong>lifetime point total</strong> shown as <code style="background:rgba(255,255,255,0.06);padding:1px 5px;border-radius:5px;font-family:monospace;font-size:0.85em;">X pts</code></li>
+        <li>Members are <strong>sorted alphabetically</strong> by name</li>
+      </ul>
+
+      <h3>How to Filter the Roster</h3>
+      <ol class="step-list">
+        <li><span class="step-num">1</span><span class="step-text">Open the <strong>Members</strong> tab.</span></li>
+        <li><span class="step-num">2</span><span class="step-text">Tap the <strong>class picker</strong> at the top.</span></li>
+        <li><span class="step-num">3</span><span class="step-text">Choose a class. The list <strong>refreshes immediately</strong>.</span></li>
+      </ol>
+
+      <div class="info-box blue">
+        <span class="info-box-icon">ℹ️</span>
+        <div class="info-box-body">The roster filters by one exact class at a time. Lifetime points are calculated by summing all point records for that member across all time.</div>
+      </div>
+    </div>
+
+    <hr class="guide-divider"/>
+
+    <!-- MEMBER DETAIL -->
+    <div class="guide-section reveal" id="member-detail">
+      <div class="section-label">Section 3</div>
+      <h2>Member <em>Detail Screen</em></h2>
+      <p>Tap any member in the roster to open that member's full detail page.</p>
+
+      <h3>What the Detail Screen Shows</h3>
+      <ul class="guide-list">
+        <li>Member name and <strong>current tier</strong></li>
+        <li><strong>Profile photo</strong> (tap to change)</li>
+        <li>Current class and <strong>class change control</strong></li>
+        <li><strong>Last month attendance</strong> — unique days with point entries, not the number of records</li>
+        <li><strong>Lifetime points</strong> — sum of all point records for this member</li>
+      </ul>
+
+      <h3>How Tier Is Determined</h3>
+      <ol class="step-list">
+        <li><span class="step-num">1</span><span class="step-text">The app loads <strong>all tiers</strong> and sorts them from highest threshold to lowest.</span></li>
+        <li><span class="step-num">2</span><span class="step-text">It picks the <strong>first tier</strong> whose threshold is less than or equal to the member's lifetime points.</span></li>
+        <li><span class="step-num">3</span><span class="step-text">If no threshold is met, the tier display shows <strong>"None"</strong>.</span></li>
+      </ol>
+
+      <h3>How to Change a Member's Class</h3>
+      <ol class="step-list">
+        <li><span class="step-num">1</span><span class="step-text">Open the member detail page.</span></li>
+        <li><span class="step-num">2</span><span class="step-text">Tap the <strong>Change Class To</strong> menu.</span></li>
+        <li><span class="step-num">3</span><span class="step-text">Select a new class. The change is written locally and synced to the server.</span></li>
+      </ol>
+
+      <h3>How to Add or Change a Profile Photo</h3>
+      <ol class="step-list">
+        <li><span class="step-num">1</span><span class="step-text">Open the member detail page.</span></li>
+        <li><span class="step-num">2</span><span class="step-text">Tap the <strong>circular profile image</strong>.</span></li>
+        <li><span class="step-num">3</span><span class="step-text">Choose or capture an image. Editing is enabled in the picker.</span></li>
+        <li><span class="step-num">4</span><span class="step-text">Close the picker. The app saves the image as a JPEG. If a server is connected, the photo syncs to the server and other iPads.</span></li>
+      </ol>
+
+      <div class="info-box green">
+        <span class="info-box-icon">✅</span>
+        <div class="info-box-body"><strong>Photo sync:</strong> When Server Mode is enabled, photos uploaded on one iPad are automatically broadcast to all other connected iPads and stored in the server's <code style="font-family:monospace;">photos/</code> folder.</div>
+      </div>
+    </div>
+
+    <hr class="guide-divider"/>
+
+    <!-- REPORTS TAB -->
+    <div class="guide-section reveal" id="reports">
+      <div class="section-label">Section 4</div>
+      <h2>Reports <em>Tab</em></h2>
+      <p>The Reports tab provides two modes: quick template reports and a fully custom report builder.</p>
+
+      <h3>Quick Template Reports</h3>
+      <p>Available templates with their date ranges (calculated from the current calendar year):</p>
+
+      <table class="guide-table">
+        <thead><tr><th>Template</th><th>Date Range</th></tr></thead>
+        <tbody>
+          <tr><td>Monthly</td><td>One month ago through today</td></tr>
+          <tr><td>Q1</td><td>January 1 – March 31</td></tr>
+          <tr><td>Q2</td><td>April 1 – June 30</td></tr>
+          <tr><td>Q3</td><td>July 1 – September 30</td></tr>
+          <tr><td>Q4</td><td>October 1 – December 31</td></tr>
+        </tbody>
+      </table>
+
+      <h4>What a Generated Report Contains</h4>
+      <p>Reports are grouped by member and show total points for the period plus dated activity lines. Example:</p>
+      <div class="code-block"><pre><span class="header">Jane Smith - 45 pts</span>
+<span class="value">  Apr 10, 2026 - Attendance: 10</span>
+<span class="value">  Apr 17, 2026 - Bible Verse: 15</span>
+<span class="value">  Apr 24, 2026 - Memory Verse: 20</span></pre></div>
+
+      <h3>Class Summary Report</h3>
+      <p>Tap <strong>Quick Generate Class Summary</strong> to see total points grouped by class, sorted highest to lowest.</p>
+
+      <div class="code-block"><pre><span class="header">Class Summary Report</span>
+
+<span class="value">Youth   – 820 pts</span>
+<span class="value">Adults  – 675 pts</span>
+<span class="value">Choir   – 310 pts</span></pre></div>
+
+      <h3>Custom Report Builder</h3>
+      <ol class="step-list">
+        <li><span class="step-num">1</span><span class="step-text">Choose <strong>PDF</strong> or <strong>CSV</strong> export format.</span></li>
+        <li><span class="step-num">2</span><span class="step-text">Set a <strong>start date</strong> and <strong>end date</strong>.</span></li>
+        <li><span class="step-num">3</span><span class="step-text">Tap <strong>member chips</strong> to include only specific members, or leave all unselected for all members.</span></li>
+        <li><span class="step-num">4</span><span class="step-text">Tap <strong>action chips</strong> to filter by specific actions, or leave all unselected.</span></li>
+        <li><span class="step-num">5</span><span class="step-text">Tap <strong>Generate Custom Report</strong>. The iOS share sheet opens for AirDrop, email, or Files.</span></li>
+      </ol>
+
+      <div class="info-box orange">
+        <span class="info-box-icon">⚠️</span>
+        <div class="info-box-body"><strong>CSV export note:</strong> The current CSV export writes the same text report to a .csv file. It is not a structured row-by-row spreadsheet. The content is identical to the on-screen text report.</div>
+      </div>
+    </div>
+
+    <hr class="guide-divider"/>
+
+    <!-- POINTS TAB -->
+    <div class="guide-section reveal" id="points">
+      <div class="section-label">Section 5</div>
+      <h2>Points <em>Tab</em></h2>
+      <p>The Points tab is the primary data-entry screen used during or after a service. It provides a grid interface for awarding points to multiple members at once.</p>
+
+      <h3>How to Award Points</h3>
+      <ol class="step-list">
+        <li><span class="step-num">1</span><span class="step-text">Open the <strong>Points</strong> tab.</span></li>
+        <li><span class="step-num">2</span><span class="step-text">Select a class from the <strong>class picker</strong>. Members in that class appear as rows; actions appear as columns.</span></li>
+        <li><span class="step-num">3</span><span class="step-text">Check the boxes for each member/action combination you want to award.</span></li>
+        <li><span class="step-num">4</span><span class="step-text">Tap <strong>Submit</strong>. All checked combinations are recorded at once with today's date.</span></li>
+      </ol>
+
+      <div class="info-box gold">
+        <span class="info-box-icon">💡</span>
+        <div class="info-box-body"><strong>No classes showing?</strong> You must add at least one class in Settings before the Points tab can display anything. See Settings: Classes below.</div>
+      </div>
+
+      <h3>How Submitted Points Are Stored</h3>
+      <p>For each checked member/action combination, the app creates one point record containing the member ID, action ID, the action's point value, and the current date and time. In Server Mode, each record is also emitted as a sync event to all connected iPads instantly.</p>
+    </div>
+
+    <hr class="guide-divider"/>
+
+    <!-- SETTINGS -->
+    <div class="guide-section reveal" id="settings">
+      <div class="section-label">Section 6</div>
+      <h2><em>Settings</em></h2>
+      <p>The Settings tab is where all administrative management happens. It is divided into sections: Sync Mode, Live Sync, Classes, Members, Actions, Tiers, and Import.</p>
+
+      <h3>Sync Mode Toggle</h3>
+      <p>At the top of Settings is a toggle between <strong>Local Only Mode</strong> and <strong>Server Mode</strong>.</p>
+
+      <table class="guide-table">
+        <thead><tr><th>Mode</th><th>Behavior</th></tr></thead>
+        <tbody>
+          <tr><td>Local Only</td><td>All data stays on this iPad. No network activity. No server required.</td></tr>
+          <tr><td>Server Mode</td><td>All writes sync to the server and broadcast to other iPads in real time. Switching on triggers a full sync.</td></tr>
+        </tbody>
+      </table>
+
+      <h3>Classes</h3>
+      <ul class="guide-list">
+        <li>View all classes in a scrollable list</li>
+        <li>Add a class: enter a name and tap <strong>Add Class</strong></li>
+        <li>Edit a class name: tap <strong>Edit</strong> on the row, change the name, tap Save</li>
+        <li>Delete a class: swipe left on the row</li>
+      </ul>
+
+      <div class="info-box blue">
+        <span class="info-box-icon">ℹ️</span>
+        <div class="info-box-body">Classes must be created before members can be added. Deleting a class does not delete its members — they remain in the database with their old class name.</div>
+      </div>
+
+      <h3>Members</h3>
+      <ul class="guide-list">
+        <li>View all members with their class assignment</li>
+        <li>Add a member: enter a name, choose a class, tap <strong>Add Member</strong></li>
+        <li>Edit a member's name: tap <strong>Edit</strong>, change the name, tap Save</li>
+        <li>Delete a member: swipe left</li>
+        <li>Move a member to a different class: open their detail page and use the class change menu</li>
+      </ul>
+
+      <h3>Actions</h3>
+      <ul class="guide-list">
+        <li>View all actions with their point values</li>
+        <li>Add an action: enter a name and point value, tap <strong>Add Action</strong></li>
+        <li>Edit an action: tap <strong>Edit</strong>, change name or points, tap Save</li>
+        <li>Delete an action: swipe left</li>
+      </ul>
+
+      <h3>Tiers</h3>
+      <ul class="guide-list">
+        <li>View all tiers with their point thresholds</li>
+        <li>Add a tier: enter a name and minimum point threshold, tap <strong>Add Tier</strong></li>
+        <li>Edit a tier: tap <strong>Edit</strong>, change name or threshold, tap Save</li>
+        <li>Delete a tier: swipe left</li>
+      </ul>
+
+      <div class="info-box gold">
+        <span class="info-box-icon">💡</span>
+        <div class="info-box-body">Best practice: create tiers from lowest threshold to highest for easier review. The app internally sorts them when deciding a member's current tier.</div>
+      </div>
+    </div>
+
+    <hr class="guide-divider"/>
+
+    <!-- SYNC -->
+    <div class="guide-section reveal" id="sync">
+      <div class="section-label">Section 7</div>
+      <h2>Live <em>Sync</em></h2>
+      <p>When Server Mode is enabled, ChurchScore connects to your self-hosted server over Tailscale and syncs changes in real time.</p>
+
+      <h3>Connection States</h3>
+      <table class="guide-table">
+        <thead><tr><th>Status</th><th>Meaning</th><th>Action</th></tr></thead>
+        <tbody>
+          <tr><td><span class="tag green">Connected</span></td><td>Server is reachable. Changes sync instantly.</td><td>None needed</td></tr>
+          <tr><td><span class="tag gold">Connecting</span></td><td>App is attempting to establish connection.</td><td>Wait a moment</td></tr>
+          <tr><td><span class="tag red">Offline</span></td><td>Server unreachable. Changes are queued locally.</td><td>Check server / Tailscale</td></tr>
+          <tr><td><span class="tag red">Disconnected</span></td><td>Not attempting to connect.</td><td>Tap Connect or check URL</td></tr>
+        </tbody>
+      </table>
+
+      <h3>Offline Queue</h3>
+      <p>If the app loses connection mid-session, all changes are saved locally and queued. When the connection is restored, the queue is automatically flushed in order. The Settings screen shows how many changes are pending.</p>
+
+      <h3>Pull Full Sync from Server</h3>
+      <p>Use this button in Settings &rarr; Live Sync when an iPad is missing data. It downloads the entire server database state and merges it with local data. Safe to run at any time — existing local data is not wiped.</p>
+
+      <h3>How to Configure the Server URL</h3>
+      <ol class="step-list">
+        <li><span class="step-num">1</span><span class="step-text">Go to <strong>Settings</strong> and enable Server Mode.</span></li>
+        <li><span class="step-num">2</span><span class="step-text">In the <strong>Live Sync</strong> section, tap <strong>Edit</strong> next to Server URL.</span></li>
+        <li><span class="step-num">3</span><span class="step-text">Enter your server's Tailscale IP: <code style="font-family:monospace;background:rgba(255,255,255,0.06);padding:1px 6px;border-radius:5px;">ws://100.x.x.x:8080</code></span></li>
+        <li><span class="step-num">4</span><span class="step-text">Tap <strong>Save</strong>. The app connects automatically.</span></li>
+      </ol>
+    </div>
+
+    <hr class="guide-divider"/>
+
+    <!-- IMPORT -->
+    <div class="guide-section reveal" id="import">
+      <div class="section-label">Section 8</div>
+      <h2>Import <em>Guide</em></h2>
+      <p>Settings &rarr; Import supports both <strong>.csv</strong> and <strong>.xlsx</strong> files. The importer detects what to load based on file structure and sheet names.</p>
+
+      <div id="import-csv">
+        <h3>CSV Import Rules</h3>
+        <p>CSV files are detected by their header row. The app checks which columns are present and treats the file accordingly.</p>
+
+        <h4>Members CSV</h4>
+        <p>Required headers: <code style="font-family:monospace;background:rgba(255,255,255,0.06);padding:1px 5px;border-radius:5px;">name</code> and <code style="font-family:monospace;background:rgba(255,255,255,0.06);padding:1px 5px;border-radius:5px;">class</code></p>
+        <div class="code-block"><pre><span class="header">name,class</span>
+<span class="value">Jane Smith,Youth</span>
+<span class="value">Michael Brown,Adults</span>
+<span class="value">Sarah Jones,Choir</span></pre></div>
+
+        <h4>Actions CSV</h4>
+        <p>Required headers: <code style="font-family:monospace;background:rgba(255,255,255,0.06);padding:1px 5px;border-radius:5px;">name</code> and <code style="font-family:monospace;background:rgba(255,255,255,0.06);padding:1px 5px;border-radius:5px;">points</code></p>
+        <div class="code-block"><pre><span class="header">name,points</span>
+<span class="value">Attendance,10</span>
+<span class="value">Bible Verse,15</span>
+<span class="value">Invite a Guest,20</span></pre></div>
+
+        <h4>Tiers CSV</h4>
+        <p>Required headers: <code style="font-family:monospace;background:rgba(255,255,255,0.06);padding:1px 5px;border-radius:5px;">name</code> and <code style="font-family:monospace;background:rgba(255,255,255,0.06);padding:1px 5px;border-radius:5px;">threshold</code></p>
+        <div class="code-block"><pre><span class="header">name,threshold</span>
+<span class="value">Bronze,100</span>
+<span class="value">Silver,250</span>
+<span class="value">Gold,500</span></pre></div>
+      </div>
+
+      <div id="import-excel">
+        <h3>Excel Import Rules</h3>
+        <p>Excel import is sheet-based. The app loops through all worksheets and checks each sheet name. The sheet name must contain one of the recognized keywords.</p>
+
+        <table class="guide-table">
+          <thead><tr><th>Sheet Name Contains</th><th>Required Headers</th><th>What Gets Imported</th></tr></thead>
+          <tbody>
+            <tr><td>member</td><td>name, class, action, points, date</td><td>Members + historical point records</td></tr>
+            <tr><td>action</td><td>name, points</td><td>Actions only</td></tr>
+            <tr><td>tier</td><td>name, threshold</td><td>Tiers only</td></tr>
+          </tbody>
+        </table>
+
+        <h4>Members Sheet Layout</h4>
+        <div class="code-block"><pre><span class="header">Name | Class | Action | Points | Date</span>
+<span class="value">Jane Smith | Youth | Attendance | 10 | 2026-04-13T00:00:00Z</span>
+<span class="value">Jane Smith | Youth | Bible Verse | 15 | 2026-04-13T00:00:00Z</span>
+<span class="value">Michael Brown | Adults | Attendance | 10 | 04/13/2026</span></pre></div>
+
+        <p>Supported date formats: <strong>ISO 8601</strong> (e.g. <code style="font-family:monospace;background:rgba(255,255,255,0.06);padding:1px 5px;border-radius:5px;">2026-04-13T00:00:00Z</code>) and <strong>MM/dd/yyyy</strong> (e.g. <code style="font-family:monospace;background:rgba(255,255,255,0.06);padding:1px 5px;border-radius:5px;">04/13/2026</code>).</p>
+      </div>
+
+      <div id="import-caveats">
+        <h3>Critical Import Caveats</h3>
+
+        <div class="info-box red">
+          <span class="info-box-icon">⚠️</span>
+          <div class="info-box-body"><strong>Excel member import is a member + history import.</strong> There is no simple Excel member-only sheet. If you use Excel for members, the importer expects all five columns including action, points, and date.</div>
+        </div>
+
+        <div class="info-box red">
+          <span class="info-box-icon">⚠️</span>
+          <div class="info-box-body"><strong>Repeated members create duplicates.</strong> The importer calls addMember for every row. If the same person appears on multiple rows, multiple member entries can be created with the same name.</div>
+        </div>
+
+        <div class="info-box orange">
+          <span class="info-box-icon">⚠️</span>
+          <div class="info-box-body"><strong>Imported Excel history uses new action IDs.</strong> Historical point records from Excel use a newly generated action ID instead of matching an existing action by name. Reports may not always resolve the action label for those historical entries.</div>
+        </div>
+
+        <div class="info-box orange">
+          <span class="info-box-icon">⚠️</span>
+          <div class="info-box-body"><strong>Unrecognized sheet names trigger a warning.</strong> Extra sheets in the workbook whose names do not contain member, action, or tier will cause the importer to display a warning message.</div>
+        </div>
+
+        <h3>Best Practice Import Strategy</h3>
+        <ol class="step-list">
+          <li><span class="step-num">1</span><span class="step-text">Import or create <strong>actions</strong> first.</span></li>
+          <li><span class="step-num">2</span><span class="step-text">Import or create <strong>tiers</strong> next.</span></li>
+          <li><span class="step-num">3</span><span class="step-text">Use <strong>CSV for simple member imports</strong> when you do not need historical point rows.</span></li>
+          <li><span class="step-num">4</span><span class="step-text">Use <strong>Excel only</strong> when you need all three recognized worksheet types with exact headers.</span></li>
+          <li><span class="step-num">5</span><span class="step-text"><strong>Avoid repeated member names</strong> on Excel member-history sheets unless you plan to clean up duplicates.</span></li>
+          <li><span class="step-num">6</span><span class="step-text">After any import, <strong>verify the roster</strong> in the Members tab immediately.</span></li>
+        </ol>
+      </div>
+    </div>
+
+    <hr class="guide-divider"/>
+
+    <!-- WORKFLOWS -->
+    <div class="guide-section reveal" id="workflows">
+      <div class="section-label">Section 9</div>
+      <h2>Recommended <em>Workflows</em></h2>
+
+      <h3>First-Time Setup Workflow</h3>
+      <p>For a new installation, follow this order for the cleanest results:</p>
+      <ol class="step-list">
+        <li><span class="step-num">1</span><span class="step-text">Open <strong>Settings</strong>. Configure Sync Mode and server URL if using multiple iPads.</span></li>
+        <li><span class="step-num">2</span><span class="step-text">Add or import <strong>classes</strong>.</span></li>
+        <li><span class="step-num">3</span><span class="step-text">Add or import <strong>actions</strong> with their point values.</span></li>
+        <li><span class="step-num">4</span><span class="step-text">Add or import <strong>tiers</strong> with their thresholds.</span></li>
+        <li><span class="step-num">5</span><span class="step-text">Add or import <strong>members</strong> assigned to classes.</span></li>
+        <li><span class="step-num">6</span><span class="step-text">Open the <strong>Members</strong> tab and verify roster data by class.</span></li>
+        <li><span class="step-num">7</span><span class="step-text">Award a few <strong>test points</strong> to confirm the grid is working.</span></li>
+        <li><span class="step-num">8</span><span class="step-text">Check a <strong>member detail page</strong> for tier and stats accuracy.</span></li>
+        <li><span class="step-num">9</span><span class="step-text">Generate a <strong>quick report</strong> to confirm records are appearing correctly.</span></li>
+      </ol>
+
+      <h3>Weekly Operating Workflow</h3>
+      <ol class="step-list">
+        <li><span class="step-num">1</span><span class="step-text">Open the app and confirm <strong>sync status</strong> is Connected.</span></li>
+        <li><span class="step-num">2</span><span class="step-text">Go to the <strong>Points</strong> tab.</span></li>
+        <li><span class="step-num">3</span><span class="step-text">Select the class for the current meeting.</span></li>
+        <li><span class="step-num">4</span><span class="step-text">Check boxes for attendance and activity points earned.</span></li>
+        <li><span class="step-num">5</span><span class="step-text">Tap <strong>Submit</strong>.</span></li>
+        <li><span class="step-num">6</span><span class="step-text">Review a few members in the roster to confirm point totals updated.</span></li>
+        <li><span class="step-num">7</span><span class="step-text">Generate a monthly or custom report as needed.</span></li>
+      </ol>
+    </div>
+
+    <hr class="guide-divider"/>
+
+    <!-- TROUBLESHOOTING -->
+    <div class="guide-section reveal" id="troubleshooting">
+      <div class="section-label">Section 10</div>
+      <h2><em>Troubleshooting</em></h2>
+
+      <div class="trouble-block">
+        <div class="trouble-problem">
+          <span class="trouble-badge">Problem</span>
+          <div class="trouble-title">No classes appear on the Points screen</div>
+        </div>
+        <div class="trouble-causes">Likely cause: no classes have been created yet.</div>
+        <div class="trouble-fix">
+          <div class="trouble-fix-label">Fix</div>
+          <ol class="step-list" style="margin-top:0.5rem;">
+            <li><span class="step-num">1</span><span class="step-text">Open <strong>Settings</strong>.</span></li>
+            <li><span class="step-num">2</span><span class="step-text">Add at least one class.</span></li>
+            <li><span class="step-num">3</span><span class="step-text">Return to the <strong>Points</strong> tab.</span></li>
+          </ol>
+        </div>
+      </div>
+
+      <div class="trouble-block">
+        <div class="trouble-problem">
+          <span class="trouble-badge">Problem</span>
+          <div class="trouble-title">Cannot add a member</div>
+        </div>
+        <div class="trouble-causes">Likely causes: member name is blank, no class is selected, or no classes exist yet.</div>
+        <div class="trouble-fix">
+          <div class="trouble-fix-label">Fix</div>
+          <ol class="step-list" style="margin-top:0.5rem;">
+            <li><span class="step-num">1</span><span class="step-text">Add a class first if none exist.</span></li>
+            <li><span class="step-num">2</span><span class="step-text">Select a class from the picker.</span></li>
+            <li><span class="step-num">3</span><span class="step-text">Enter the member name and tap <strong>Add Member</strong>.</span></li>
+          </ol>
+        </div>
+      </div>
+
+      <div class="trouble-block">
+        <div class="trouble-problem">
+          <span class="trouble-badge">Problem</span>
+          <div class="trouble-title">Imported workbook shows a warning</div>
+        </div>
+        <div class="trouble-causes">Likely causes: extra unrecognized sheet, missing required headers, numeric columns are not numeric, or invalid date format.</div>
+        <div class="trouble-fix">
+          <div class="trouble-fix-label">Fix</div>
+          <ul class="guide-list" style="margin-top:0.5rem;">
+            <li>Use only the recognized sheet names: member, action, tier</li>
+            <li>Keep exact header names (lowercase, exact spelling)</li>
+            <li>Ensure points and thresholds are whole numbers</li>
+            <li>Use <code style="font-family:monospace;background:rgba(255,255,255,0.06);padding:1px 5px;border-radius:5px;">MM/DD/YYYY</code> or ISO 8601 dates</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="trouble-block">
+        <div class="trouble-problem">
+          <span class="trouble-badge">Problem</span>
+          <div class="trouble-title">Duplicate members after Excel import</div>
+        </div>
+        <div class="trouble-causes">Likely cause: repeated member rows in the Excel member-history sheet.</div>
+        <div class="trouble-fix">
+          <div class="trouble-fix-label">Fix</div>
+          <ol class="step-list" style="margin-top:0.5rem;">
+            <li><span class="step-num">1</span><span class="step-text">Review imported members in <strong>Settings</strong>.</span></li>
+            <li><span class="step-num">2</span><span class="step-text">Swipe to delete duplicates.</span></li>
+            <li><span class="step-num">3</span><span class="step-text">Prefer CSV for simple member-only imports going forward.</span></li>
+          </ol>
+        </div>
+      </div>
+
+      <div class="trouble-block">
+        <div class="trouble-problem">
+          <span class="trouble-badge">Problem</span>
+          <div class="trouble-title">Sync stays Offline or Disconnected</div>
+        </div>
+        <div class="trouble-causes">Likely causes: missing server URL, incorrect WebSocket URL format, Tailscale not connected, or server not running.</div>
+        <div class="trouble-fix">
+          <div class="trouble-fix-label">Fix</div>
+          <ol class="step-list" style="margin-top:0.5rem;">
+            <li><span class="step-num">1</span><span class="step-text">Confirm Tailscale is running on both the server and the iPad.</span></li>
+            <li><span class="step-num">2</span><span class="step-text">Check the server URL starts with <code style="font-family:monospace;background:rgba(255,255,255,0.06);padding:1px 5px;border-radius:5px;">ws://</code> and includes port 8080.</span></li>
+            <li><span class="step-num">3</span><span class="step-text">Visit <code style="font-family:monospace;background:rgba(255,255,255,0.06);padding:1px 5px;border-radius:5px;">http://YOUR_IP:8080/health</code> in a browser to confirm the server is running.</span></li>
+            <li><span class="step-num">4</span><span class="step-text">Tap <strong>Connect</strong> then <strong>Pull Full Sync from Server</strong> after connection is restored.</span></li>
+          </ol>
+        </div>
+      </div>
+
+      <div class="trouble-block">
+        <div class="trouble-problem">
+          <span class="trouble-badge">Problem</span>
+          <div class="trouble-title">Changes on one iPad not appearing on another</div>
+        </div>
+        <div class="trouble-causes">Likely causes: one or both iPads are in Local Only mode, or connection was lost and changes are queued.</div>
+        <div class="trouble-fix">
+          <div class="trouble-fix-label">Fix</div>
+          <ol class="step-list" style="margin-top:0.5rem;">
+            <li><span class="step-num">1</span><span class="step-text">Verify both iPads show <strong>Connected</strong> in Settings &rarr; Live Sync.</span></li>
+            <li><span class="step-num">2</span><span class="step-text">Confirm Server Mode is <strong>enabled</strong> on both devices.</span></li>
+            <li><span class="step-num">3</span><span class="step-text">On the iPad missing data, tap <strong>Pull Full Sync from Server</strong>.</span></li>
+          </ol>
+        </div>
+      </div>
+    </div>
+
+    <hr class="guide-divider"/>
+
+    <!-- CHECKLIST -->
+    <div class="guide-section reveal" id="checklist">
+      <div class="section-label">Section 11</div>
+      <h2>Admin <em>Checklist</em></h2>
+      <p>Use after setup or after any large import to confirm the app is in a clean state.</p>
+
+      <ul class="checklist">
+        <li>Classes exist and are spelled correctly</li>
+        <li>Members appear in the expected class</li>
+        <li>Actions display correct point values</li>
+        <li>Tiers display correct thresholds</li>
+        <li>Award a small test action successfully</li>
+        <li>Open one member detail screen</li>
+        <li>Confirm lifetime points changed</li>
+        <li>Confirm tier display makes sense</li>
+        <li>Generate a quick report</li>
+        <li>Confirm report shows correct data</li>
+        <li>Sync status shows Connected (if using server)</li>
+        <li>Pull Full Sync on each new iPad</li>
+      </ul>
+
+      <div class="info-box green">
+        <span class="info-box-icon">✅</span>
+        <div class="info-box-body"><strong>Data quality tips:</strong> Standardize class names. Avoid near-duplicate action names. Keep one preferred spelling per member name. Verify imports in the roster immediately after loading data.</div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-brand">Church<em>Score Live</em></div>
+  <p class="footer-sub">How-To Guide — built from the current app codebase. For the import template and animated walkthrough, visit the main demo page.</p>
+</footer>
+
+<script>
+// Sidebar active state on scroll
+const sections = document.querySelectorAll('.guide-section');
+const sidebarLinks = document.querySelectorAll('.sidebar-nav a');
+
+const io = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      sidebarLinks.forEach(a => a.classList.remove('active'));
+      const match = document.querySelector('.sidebar-nav a[href="#' + e.target.id + '"]');
+      if (match) match.classList.add('active');
+    }
+  });
+}, { rootMargin: '-30% 0px -60% 0px' });
+
+sections.forEach(s => io.observe(s));
+
+// Reveal on scroll
+const revealObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) { e.target.classList.add('visible'); revealObs.unobserve(e.target); }
+  });
+}, { threshold: 0.08 });
+
+document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
+</script>
+</body>
+</html>
