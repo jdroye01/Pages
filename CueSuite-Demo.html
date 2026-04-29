@@ -1,0 +1,1603 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>CueSuite — Live Demo</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --bg:        #09090b;
+    --bg2:       #111115;
+    --panel:     #16161c;
+    --border:    rgba(255,255,255,0.07);
+    --gold:      #c9a84c;
+    --gold2:     #e8c97a;
+    --cream:     #f5f0e8;
+    --purple:    #7c5cbf;
+    --purple2:   #a07de0;
+    --blue:      #3b7dd8;
+    --green:     #2ea87e;
+    --orange:    #e07c3b;
+    --red:       #d94f4f;
+    --text:      #e8e4dc;
+    --muted:     #6b6760;
+    --radius:    18px;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; background: var(--bg); }
+
+  body {
+    font-family: 'Syne', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    overflow-x: hidden;
+  }
+
+  /* ── GRAIN OVERLAY ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    opacity: 0.35;
+    pointer-events: none;
+    z-index: 9999;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 4rem 2rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 70% 50% at 50% 0%, rgba(201,168,76,0.08) 0%, transparent 60%),
+      radial-gradient(ellipse 40% 60% at 80% 80%, rgba(124,92,191,0.06) 0%, transparent 55%),
+      radial-gradient(ellipse 50% 40% at 20% 60%, rgba(59,125,216,0.05) 0%, transparent 55%);
+  }
+
+  /* animated grid lines */
+  .hero-grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(201,168,76,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(201,168,76,0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+    animation: grid-drift 20s linear infinite;
+  }
+
+  @keyframes grid-drift {
+    0%   { transform: translateY(0); }
+    100% { transform: translateY(60px); }
+  }
+
+  .hero-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.72rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    border: 1px solid rgba(201,168,76,0.25);
+    padding: 0.35rem 1rem;
+    border-radius: 100px;
+    margin-bottom: 2rem;
+    animation: fade-up 0.8s ease both;
+  }
+
+  .hero-eyebrow::before {
+    content: '';
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    background: var(--gold);
+    animation: pulse-dot 2s ease infinite;
+  }
+
+  @keyframes pulse-dot {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50%       { opacity: 0.5; transform: scale(0.7); }
+  }
+
+  .hero-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(3.5rem, 10vw, 7rem);
+    font-weight: 700;
+    line-height: 0.95;
+    letter-spacing: -0.03em;
+    margin-bottom: 1.5rem;
+    animation: fade-up 0.9s 0.1s ease both;
+  }
+
+  .hero-title em {
+    font-style: italic;
+    color: var(--gold2);
+    display: block;
+  }
+
+  .hero-sub {
+    font-size: 1.1rem;
+    color: var(--muted);
+    max-width: 480px;
+    line-height: 1.7;
+    margin-bottom: 3rem;
+    animation: fade-up 0.9s 0.2s ease both;
+  }
+
+  .hero-cta {
+    display: inline-flex;
+    gap: 0.75rem;
+    animation: fade-up 0.9s 0.3s ease both;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.85rem 2rem;
+    border-radius: 100px;
+    font-family: 'Syne', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    letter-spacing: 0.02em;
+  }
+
+  .btn-gold {
+    background: var(--gold);
+    color: #09090b;
+  }
+  .btn-gold:hover { background: var(--gold2); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(201,168,76,0.3); }
+
+  .btn-ghost {
+    background: var(--border);
+    color: var(--text);
+    border: 1px solid rgba(255,255,255,0.1);
+    backdrop-filter: blur(8px);
+  }
+  .btn-ghost:hover { background: rgba(255,255,255,0.08); transform: translateY(-2px); }
+
+  @keyframes fade-up {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── SECTION ── */
+  .section {
+    padding: 8rem 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .section-label {
+    font-size: 0.72rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 0.75rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .section-label::before {
+    content: '';
+    width: 20px; height: 1px;
+    background: var(--gold);
+  }
+
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    margin-bottom: 1rem;
+  }
+
+  .section-title em { font-style: italic; color: var(--gold2); }
+
+  .section-body {
+    font-size: 1rem;
+    color: var(--muted);
+    line-height: 1.75;
+    max-width: 520px;
+  }
+
+  /* ── DEMO FRAME ── */
+  .demo-wrap {
+    position: relative;
+    margin: 3rem auto 0;
+  }
+
+  /* iPad mockup */
+  .ipad-mockup {
+    width: min(640px, 90vw);
+    margin: 0 auto;
+    background: #1c1c20;
+    border-radius: 30px;
+    border: 2px solid rgba(255,255,255,0.1);
+    padding: 20px;
+    box-shadow:
+      0 0 0 1px rgba(0,0,0,0.5),
+      0 40px 80px rgba(0,0,0,0.7),
+      inset 0 1px 0 rgba(255,255,255,0.05);
+    position: relative;
+  }
+
+  .ipad-mockup::before {
+    content: '';
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px; height: 4px;
+    background: rgba(255,255,255,0.15);
+    border-radius: 2px;
+  }
+
+  .ipad-screen {
+    background: #0f0f13;
+    border-radius: 18px;
+    overflow: hidden;
+    aspect-ratio: 4/3;
+    position: relative;
+  }
+
+  /* iPhone mockup */
+  .iphone-mockup {
+    width: min(220px, 50vw);
+    background: #1c1c20;
+    border-radius: 42px;
+    border: 2px solid rgba(255,255,255,0.1);
+    padding: 14px;
+    box-shadow:
+      0 0 0 1px rgba(0,0,0,0.5),
+      0 30px 60px rgba(0,0,0,0.6),
+      inset 0 1px 0 rgba(255,255,255,0.05);
+    position: relative;
+  }
+
+  .iphone-mockup::before {
+    content: '';
+    position: absolute;
+    top: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 70px; height: 5px;
+    background: rgba(255,255,255,0.15);
+    border-radius: 3px;
+  }
+
+  .iphone-screen {
+    background: #0f0f13;
+    border-radius: 30px;
+    overflow: hidden;
+    aspect-ratio: 9/19.5;
+    position: relative;
+  }
+
+  /* ── SCENE SYSTEM ── */
+  .scene {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity 0.6s ease;
+    pointer-events: none;
+  }
+
+  .scene.active {
+    opacity: 1;
+    pointer-events: all;
+  }
+
+  /* ── CUE GRID SCENE ── */
+  .cue-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 6px;
+    padding: 8px;
+    height: 100%;
+    align-content: start;
+  }
+
+  .cue-cell {
+    background: #1e1e26;
+    border-radius: 10px;
+    padding: 8px;
+    border: 1px solid rgba(255,255,255,0.06);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 80px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cue-cell.playing {
+    border-color: rgba(201,168,76,0.4);
+    background: #1e1c16;
+  }
+
+  .cue-cell.playing::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: var(--gold);
+    animation: play-progress 8s linear infinite;
+    transform-origin: left;
+  }
+
+  @keyframes play-progress {
+    from { transform: scaleX(0); }
+    to   { transform: scaleX(1); }
+  }
+
+  .cue-cell.empty { opacity: 0.3; border-style: dashed; }
+  .cue-cell:not(.empty):hover { transform: translateY(-2px); border-color: rgba(255,255,255,0.15); }
+
+  .cue-title {
+    font-size: 0.6rem;
+    font-weight: 700;
+    color: var(--text);
+    letter-spacing: 0.02em;
+    line-height: 1.3;
+  }
+
+  .cue-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+  }
+
+  .cue-pts {
+    font-size: 0.5rem;
+    color: var(--muted);
+  }
+
+  .cue-play {
+    width: 18px; height: 18px;
+    border-radius: 50%;
+    background: var(--gold);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .cue-play svg { width: 8px; height: 8px; fill: #09090b; }
+
+  .cue-play.pause { background: var(--orange); }
+
+  /* progress bar in scene */
+  .progress-bar-wrap {
+    background: #0a0a0e;
+    padding: 8px 12px;
+    border-top: 1px solid rgba(255,255,255,0.05);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.55rem;
+    color: var(--muted);
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  .progress-bar-track {
+    flex: 1;
+    height: 3px;
+    background: rgba(255,255,255,0.08);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .progress-bar-fill {
+    height: 100%;
+    background: var(--gold);
+    border-radius: 2px;
+    animation: bar-fill 8s linear infinite;
+    transform-origin: left;
+  }
+
+  @keyframes bar-fill {
+    0%   { width: 0%; }
+    100% { width: 100%; }
+  }
+
+  /* toolbar */
+  .toolbar {
+    background: #0d0d11;
+    padding: 6px 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+  }
+
+  .toolbar-title {
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+  }
+
+  .toolbar-actions {
+    display: flex;
+    gap: 6px;
+  }
+
+  .tb-btn {
+    width: 22px; height: 22px;
+    border-radius: 6px;
+    background: rgba(255,255,255,0.06);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.55rem;
+    cursor: pointer;
+    border: 1px solid rgba(255,255,255,0.06);
+    color: var(--muted);
+    transition: all 0.15s;
+  }
+
+  .tb-btn:hover { background: rgba(255,255,255,0.1); color: var(--text); }
+  .tb-btn.gold { background: rgba(201,168,76,0.15); color: var(--gold); border-color: rgba(201,168,76,0.2); }
+
+  /* playing cue bar */
+  .now-playing-bar {
+    background: linear-gradient(135deg, #1e1c16, #1a1810);
+    border-bottom: 1px solid rgba(201,168,76,0.15);
+    padding: 6px 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .live-badge {
+    font-size: 0.45rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    background: var(--red);
+    color: white;
+    padding: 1px 5px;
+    border-radius: 3px;
+    flex-shrink: 0;
+    animation: live-pulse 1.5s ease infinite;
+  }
+
+  @keyframes live-pulse {
+    0%, 100% { opacity: 1; }
+    50%       { opacity: 0.6; }
+  }
+
+  .np-title {
+    font-size: 0.6rem;
+    font-weight: 600;
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .np-time {
+    font-size: 0.5rem;
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--muted);
+    flex-shrink: 0;
+  }
+
+  /* ── MARKERS SCENE ── */
+  .markers-scene {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+
+  .marker-list {
+    flex: 1;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    overflow: hidden;
+  }
+
+  .marker-row {
+    background: #1e1e26;
+    border-radius: 8px;
+    padding: 6px 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border: 1px solid rgba(255,255,255,0.05);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    animation: marker-slide 0.4s ease both;
+  }
+
+  .marker-row:nth-child(1) { animation-delay: 0.05s; }
+  .marker-row:nth-child(2) { animation-delay: 0.1s; }
+  .marker-row:nth-child(3) { animation-delay: 0.15s; }
+  .marker-row:nth-child(4) { animation-delay: 0.2s; }
+  .marker-row:nth-child(5) { animation-delay: 0.25s; }
+
+  @keyframes marker-slide {
+    from { opacity: 0; transform: translateX(-10px); }
+    to   { opacity: 1; transform: translateX(0); }
+  }
+
+  .marker-row:hover { background: #252530; border-color: rgba(124,92,191,0.3); }
+  .marker-row.active { background: #1e1a2e; border-color: rgba(124,92,191,0.5); }
+
+  .marker-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--purple2);
+    flex-shrink: 0;
+  }
+
+  .marker-dot.active { background: var(--gold); animation: pulse-dot 1.2s infinite; }
+
+  .marker-name {
+    font-size: 0.6rem;
+    font-weight: 600;
+    flex: 1;
+  }
+
+  .marker-time {
+    font-size: 0.5rem;
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--muted);
+  }
+
+  .marker-jump {
+    font-size: 0.5rem;
+    background: rgba(124,92,191,0.2);
+    color: var(--purple2);
+    padding: 2px 6px;
+    border-radius: 4px;
+    border: 1px solid rgba(124,92,191,0.2);
+  }
+
+  /* ── NEXT CUE SCENE ── */
+  .next-cue-badge {
+    font-size: 0.5rem;
+    color: var(--gold);
+    padding: 2px 6px;
+    background: rgba(201,168,76,0.1);
+    border: 1px solid rgba(201,168,76,0.2);
+    border-radius: 4px;
+  }
+
+  /* ── MOBILE REMOTE SCENE ── */
+  .mobile-remote {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    background: #0f0f13;
+    font-size: 0.6rem;
+  }
+
+  .mr-connection {
+    background: rgba(46,168,126,0.1);
+    border-bottom: 1px solid rgba(46,168,126,0.2);
+    padding: 5px 10px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.5rem;
+  }
+
+  .mr-dot {
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    background: var(--green);
+    animation: pulse-dot 2s infinite;
+  }
+
+  .mr-connected { color: var(--green); font-weight: 600; }
+
+  .mr-now-playing {
+    background: #161620;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .mr-cue-name {
+    font-size: 0.75rem;
+    font-weight: 700;
+    font-family: 'Playfair Display', serif;
+  }
+
+  .mr-progress {
+    height: 3px;
+    background: rgba(255,255,255,0.08);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .mr-progress-fill {
+    height: 100%;
+    width: 42%;
+    background: var(--blue);
+    border-radius: 2px;
+  }
+
+  .mr-times {
+    display: flex;
+    justify-content: space-between;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.45rem;
+    color: var(--muted);
+  }
+
+  .mr-transport {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    padding: 10px;
+  }
+
+  .mr-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    flex-shrink: 0;
+    cursor: pointer;
+  }
+
+  .mr-btn.stop { width: 30px; height: 30px; background: #2a2a30; }
+  .mr-btn.play { width: 42px; height: 42px; background: var(--blue); }
+  .mr-btn.fade { width: 30px; height: 30px; background: #3a2010; }
+
+  .mr-cue-list { flex: 1; overflow: hidden; padding: 0 8px; }
+  .mr-cue-list-title { font-size: 0.45rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); padding: 5px 0 3px; }
+
+  .mr-cue-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 6px;
+    border-radius: 6px;
+    border: 1px solid transparent;
+    margin-bottom: 2px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .mr-cue-item.active { background: rgba(59,125,216,0.1); border-color: rgba(59,125,216,0.2); }
+
+  .mr-cue-name-text { font-size: 0.55rem; font-weight: 500; flex: 1; }
+  .mr-marker-badge { font-size: 0.4rem; background: rgba(124,92,191,0.2); color: var(--purple2); padding: 1px 4px; border-radius: 3px; }
+
+  .mr-markers {
+    padding: 6px 8px;
+    border-top: 1px solid rgba(255,255,255,0.05);
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+
+  .mr-marker-btn {
+    background: var(--purple);
+    border-radius: 6px;
+    padding: 4px 8px;
+    font-size: 0.5rem;
+    font-weight: 600;
+    color: white;
+    cursor: pointer;
+    text-align: left;
+  }
+
+  /* ── FEATURE GRID ── */
+  .feature-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.5rem;
+    margin-top: 4rem;
+  }
+
+  .feature-card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 2rem;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+  }
+
+  .feature-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .feature-card:hover { transform: translateY(-4px); border-color: rgba(201,168,76,0.2); }
+  .feature-card:hover::before { opacity: 1; }
+
+  .feature-icon {
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+    display: block;
+  }
+
+  .feature-name {
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    letter-spacing: -0.01em;
+  }
+
+  .feature-desc {
+    font-size: 0.875rem;
+    color: var(--muted);
+    line-height: 1.65;
+  }
+
+  .feature-tag {
+    display: inline-block;
+    margin-top: 1rem;
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--gold);
+    padding: 0.2rem 0.6rem;
+    border: 1px solid rgba(201,168,76,0.2);
+    border-radius: 100px;
+  }
+
+  /* ── TIMELINE DEMO ── */
+  .timeline-section {
+    padding: 8rem 2rem;
+    background: var(--bg2);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .timeline-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .timeline-controls {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 2.5rem;
+    flex-wrap: wrap;
+  }
+
+  .scene-btn {
+    padding: 0.55rem 1.2rem;
+    border-radius: 100px;
+    font-family: 'Syne', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    border: 1px solid rgba(255,255,255,0.1);
+    background: transparent;
+    color: var(--muted);
+    transition: all 0.2s ease;
+    letter-spacing: 0.02em;
+  }
+
+  .scene-btn.active, .scene-btn:hover {
+    background: var(--gold);
+    color: var(--bg);
+    border-color: var(--gold);
+  }
+
+  .demo-stage {
+    margin-top: 2rem;
+    display: flex;
+    gap: 2rem;
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .demo-caption {
+    flex: 1;
+    min-width: 240px;
+    padding-top: 1rem;
+  }
+
+  .demo-caption-step {
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 0.5rem;
+  }
+
+  .demo-caption-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem;
+    font-weight: 700;
+    line-height: 1.15;
+    margin-bottom: 0.75rem;
+    letter-spacing: -0.02em;
+  }
+
+  .demo-caption-body {
+    font-size: 0.9rem;
+    color: var(--muted);
+    line-height: 1.7;
+  }
+
+  /* ── CONNECT SCENE ── */
+  .connect-scene {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    gap: 10px;
+    padding: 16px;
+  }
+
+  .connect-title {
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    margin-bottom: 4px;
+  }
+
+  .connect-row {
+    width: 100%;
+    background: #1e1e26;
+    border-radius: 10px;
+    padding: 8px 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border: 1px solid rgba(255,255,255,0.06);
+    cursor: pointer;
+    transition: all 0.2s;
+    animation: connect-in 0.35s ease both;
+  }
+
+  .connect-row:nth-child(2) { animation-delay: 0.05s; }
+  .connect-row:nth-child(3) { animation-delay: 0.1s; }
+  .connect-row:nth-child(4) { animation-delay: 0.15s; }
+
+  @keyframes connect-in {
+    from { opacity: 0; transform: scale(0.95); }
+    to   { opacity: 1; transform: scale(1); }
+  }
+
+  .connect-row:hover { border-color: rgba(201,168,76,0.3); background: #252525; }
+
+  .connect-icon {
+    width: 28px; height: 28px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    flex-shrink: 0;
+  }
+
+  .connect-text { font-size: 0.55rem; font-weight: 600; flex: 1; }
+  .connect-arrow { font-size: 0.6rem; color: var(--muted); }
+
+  .connect-signal {
+    display: flex;
+    gap: 2px;
+    align-items: flex-end;
+  }
+
+  .sig-bar {
+    width: 3px;
+    background: var(--green);
+    border-radius: 1px;
+  }
+
+  /* ── STATS CARDS ── */
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 1rem;
+    margin-top: 5rem;
+    padding: 0 2rem;
+    max-width: 1000px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .stat-card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 1.5rem;
+    text-align: center;
+  }
+
+  .stat-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--gold2);
+    line-height: 1;
+    margin-bottom: 0.35rem;
+    letter-spacing: -0.02em;
+  }
+
+  .stat-label {
+    font-size: 0.78rem;
+    color: var(--muted);
+    letter-spacing: 0.04em;
+  }
+
+  /* ── FOOTER ── */
+  .footer {
+    padding: 4rem 2rem;
+    text-align: center;
+    border-top: 1px solid var(--border);
+  }
+
+  .footer-brand {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+  }
+
+  .footer-brand em { font-style: italic; color: var(--gold2); }
+
+  .footer-sub {
+    font-size: 0.85rem;
+    color: var(--muted);
+    margin-bottom: 2rem;
+  }
+
+  .footer-links {
+    display: flex;
+    gap: 2rem;
+    justify-content: center;
+    font-size: 0.8rem;
+  }
+
+  .footer-links a {
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.15s;
+  }
+
+  .footer-links a:hover { color: var(--gold); }
+
+  /* ── SCROLL REVEAL ── */
+  .reveal {
+    opacity: 0;
+    transform: translateY(32px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ── AUTO PROGRESS ── */
+  .progress-dots {
+    display: flex;
+    gap: 6px;
+    justify-content: center;
+    margin-top: 1.5rem;
+  }
+
+  .pdot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.2);
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+
+  .pdot.active {
+    width: 24px;
+    border-radius: 3px;
+    background: var(--gold);
+  }
+
+  @media (max-width: 640px) {
+    .demo-stage { flex-direction: column; align-items: center; }
+    .ipad-mockup { width: 90vw; }
+    .feature-grid { grid-template-columns: 1fr; }
+    .hero-title { font-size: 3rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ── HERO ── -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+
+  <div class="hero-eyebrow">iPad · iPhone · Live Performance</div>
+
+  <h1 class="hero-title">
+    Cue<em>Suite</em>
+  </h1>
+
+  <p class="hero-sub">
+    Professional sound cue management for live performances. Play, pause, fade, and jump — on stage or from the back of the room.
+  </p>
+
+  <div class="hero-cta">
+    <a class="btn btn-gold" href="#demo">▶ Watch Demo</a>
+    <a class="btn btn-ghost" href="CueSuite-Support.html">Documentation</a>
+  </div>
+</section>
+
+<!-- ── STATS ── -->
+<div class="stats-row reveal">
+  <div class="stat-card">
+    <div class="stat-num">∞</div>
+    <div class="stat-label">Cues per show</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-num">Wi-Fi</div>
+    <div class="stat-label">+ Bluetooth control</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-num">0ms</div>
+    <div class="stat-label">Delay on play</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-num">100%</div>
+    <div class="stat-label">Silent-switch proof</div>
+  </div>
+</div>
+
+<!-- ── FEATURES ── -->
+<div class="section reveal" id="features">
+  <div class="section-label">Feature Overview</div>
+  <h2 class="section-title">Everything a sound op<br><em>actually needs.</em></h2>
+  <p class="section-body">Built for the real demands of live theatre, worship, and events — not a music player with extra steps.</p>
+
+  <div class="feature-grid">
+
+    <div class="feature-card">
+      <span class="feature-icon">🎛️</span>
+      <div class="feature-name">Grid Layout</div>
+      <div class="feature-desc">Up to dozens of cues per page, arranged in a customisable drag-and-drop grid. Pages expand automatically as you add cues.</div>
+      <span class="feature-tag">iPad</span>
+    </div>
+
+    <div class="feature-card">
+      <span class="feature-icon">📍</span>
+      <div class="feature-name">Named Markers</div>
+      <div class="feature-desc">Mark any moment inside a cue — verse, chorus, sfx sting, scene change. Jump there instantly with one tap from the iPad or iPhone.</div>
+      <span class="feature-tag">iPad · Mobile</span>
+    </div>
+
+    <div class="feature-card">
+      <span class="feature-icon">🔗</span>
+      <div class="feature-name">Next Cue Chaining</div>
+      <div class="feature-desc">When a cue ends, the next one starts automatically. Chain to a full cue or directly to a specific marker within it.</div>
+      <span class="feature-tag">iPad</span>
+    </div>
+
+    <div class="feature-card">
+      <span class="feature-icon">📱</span>
+      <div class="feature-name">Mobile Remote</div>
+      <div class="feature-desc">CueSuite Mobile on iPhone gives the sound operator full wireless control — over Wi-Fi or Bluetooth — from anywhere in the venue.</div>
+      <span class="feature-tag">iPhone</span>
+    </div>
+
+    <div class="feature-card">
+      <span class="feature-icon">🔊</span>
+      <div class="feature-name">Fade Out</div>
+      <div class="feature-desc">Smooth one-second fade triggered from the iPad or remotely from iPhone. No abrupt cuts mid-scene.</div>
+      <span class="feature-tag">iPad · Mobile</span>
+    </div>
+
+    <div class="feature-card">
+      <span class="feature-icon">🔐</span>
+      <div class="feature-name">Password Protection</div>
+      <div class="feature-desc">Lock remote control behind a password so only your designated operator can send commands from the iPhone.</div>
+      <span class="feature-tag">Security</span>
+    </div>
+
+    <div class="feature-card">
+      <span class="feature-icon">🎵</span>
+      <div class="feature-name">Any Audio Format</div>
+      <div class="feature-desc">MP3, M4A, WAV, FLAC, AIFF, CAF, WMA. Files from the Files app or Apple Music library — DRM-free tracks get full volume and marker control.</div>
+      <span class="feature-tag">Audio</span>
+    </div>
+
+    <div class="feature-card">
+      <span class="feature-icon">🔇</span>
+      <div class="feature-name">Ignores Silent Switch</div>
+      <div class="feature-desc">Audio routes through the speaker regardless of the hardware silent switch — critical for live performance reliability.</div>
+      <span class="feature-tag">Reliability</span>
+    </div>
+
+    <div class="feature-card">
+      <span class="feature-icon">🔒</span>
+      <div class="feature-name">Per-Cue Volume Lock</div>
+      <div class="feature-desc">Set the exact volume for each cue and lock it to prevent accidental changes during a show. Unlock with a single tap when adjustments are needed.</div>
+      <span class="feature-tag">iPad</span>
+    </div>
+
+  </div>
+</div>
+
+<!-- ── INTERACTIVE DEMO ── -->
+<section class="timeline-section" id="demo">
+  <div class="timeline-inner">
+
+    <div class="reveal">
+      <div class="section-label">Interactive Demo</div>
+      <h2 class="section-title">See it in action.</h2>
+      <p class="section-body">Click any scene below to explore the key moments of a live show.</p>
+    </div>
+
+    <div class="timeline-controls reveal" style="transition-delay:0.1s">
+      <button class="scene-btn active" onclick="showScene(0, this)">🎬 Cue Grid</button>
+      <button class="scene-btn" onclick="showScene(1, this)">📍 Markers</button>
+      <button class="scene-btn" onclick="showScene(2, this)">🔗 Next Cue</button>
+      <button class="scene-btn" onclick="showScene(3, this)">📱 Mobile Remote</button>
+      <button class="scene-btn" onclick="showScene(4, this)">📡 Connecting</button>
+    </div>
+
+    <div class="demo-stage reveal" style="transition-delay:0.2s">
+
+      <!-- MOCKUP -->
+      <div id="mockup-wrap">
+        <!-- iPad shown for scenes 0–2 and 4 -->
+        <div class="ipad-mockup" id="ipad-wrap">
+          <div class="ipad-screen">
+
+            <!-- SCENE 0: Cue Grid -->
+            <div class="scene active" id="scene-0">
+              <div class="toolbar">
+                <span class="toolbar-title">⚡ CueSuite</span>
+                <div class="toolbar-actions">
+                  <div class="tb-btn">◀</div>
+                  <div class="tb-btn">▶</div>
+                  <div class="tb-btn gold">+</div>
+                  <div class="tb-btn">⚙</div>
+                </div>
+              </div>
+              <div class="now-playing-bar">
+                <span class="live-badge">LIVE</span>
+                <span class="np-title">Act II — Opening Music</span>
+                <span class="np-time">1:24 / 3:12</span>
+              </div>
+              <div class="cue-grid">
+                <div class="cue-cell playing">
+                  <div class="cue-title">Act II — Opening Music</div>
+                  <div class="cue-bottom">
+                    <span class="cue-pts">3 markers</span>
+                    <div class="cue-play pause">
+                      <svg viewBox="0 0 10 10"><rect x="1.5" y="1" width="3" height="8"/><rect x="5.5" y="1" width="3" height="8"/></svg>
+                    </div>
+                  </div>
+                </div>
+                <div class="cue-cell">
+                  <div class="cue-title">Scene Change SFX</div>
+                  <div class="cue-bottom">
+                    <span class="cue-pts">0:04</span>
+                    <div class="cue-play"><svg viewBox="0 0 10 10"><polygon points="2,1 9,5 2,9"/></svg></div>
+                  </div>
+                </div>
+                <div class="cue-cell">
+                  <div class="cue-title">Intermission Loop</div>
+                  <div class="cue-bottom">
+                    <span class="cue-pts">2 markers</span>
+                    <div class="cue-play"><svg viewBox="0 0 10 10"><polygon points="2,1 9,5 2,9"/></svg></div>
+                  </div>
+                </div>
+                <div class="cue-cell">
+                  <div class="cue-title">Curtain Call</div>
+                  <div class="cue-bottom">
+                    <span class="cue-pts">★ Next</span>
+                    <div class="cue-play"><svg viewBox="0 0 10 10"><polygon points="2,1 9,5 2,9"/></svg></div>
+                  </div>
+                </div>
+                <div class="cue-cell">
+                  <div class="cue-title">Thunder Rumble</div>
+                  <div class="cue-bottom">
+                    <span class="cue-pts">0:08</span>
+                    <div class="cue-play"><svg viewBox="0 0 10 10"><polygon points="2,1 9,5 2,9"/></svg></div>
+                  </div>
+                </div>
+                <div class="cue-cell">
+                  <div class="cue-title">Preshow Music</div>
+                  <div class="cue-bottom">
+                    <span class="cue-pts">1 marker</span>
+                    <div class="cue-play"><svg viewBox="0 0 10 10"><polygon points="2,1 9,5 2,9"/></svg></div>
+                  </div>
+                </div>
+                <div class="cue-cell">
+                  <div class="cue-title">Applause Loop</div>
+                  <div class="cue-bottom">
+                    <span class="cue-pts">🔒</span>
+                    <div class="cue-play"><svg viewBox="0 0 10 10"><polygon points="2,1 9,5 2,9"/></svg></div>
+                  </div>
+                </div>
+                <div class="cue-cell empty">
+                  <div class="cue-title">＋</div>
+                </div>
+              </div>
+              <div class="progress-bar-wrap">
+                <span>1:24</span>
+                <div class="progress-bar-track"><div class="progress-bar-fill"></div></div>
+                <span>-1:48</span>
+              </div>
+            </div>
+
+            <!-- SCENE 1: Markers -->
+            <div class="scene" id="scene-1">
+              <div class="toolbar">
+                <span class="toolbar-title">📍 Markers — Act II Opening</span>
+                <div class="toolbar-actions">
+                  <div class="tb-btn gold">+ Marker</div>
+                </div>
+              </div>
+              <div class="now-playing-bar">
+                <span class="live-badge">LIVE</span>
+                <span class="np-title">Act II — Opening Music · <span style="color:var(--purple2)">▶ Verse 1</span></span>
+                <span class="np-time">0:32 / 3:12</span>
+              </div>
+              <div class="markers-scene">
+                <div class="marker-list">
+                  <div class="marker-row active">
+                    <div class="marker-dot active"></div>
+                    <span class="marker-name">Verse 1</span>
+                    <span class="marker-time">0:00 → 0:45</span>
+                    <span class="marker-jump">▶ Now</span>
+                  </div>
+                  <div class="marker-row">
+                    <div class="marker-dot"></div>
+                    <span class="marker-name">Chorus</span>
+                    <span class="marker-time">0:45 → 1:30</span>
+                    <span class="marker-jump">Jump</span>
+                  </div>
+                  <div class="marker-row">
+                    <div class="marker-dot"></div>
+                    <span class="marker-name">Bridge</span>
+                    <span class="marker-time">1:30 → 2:10</span>
+                    <span class="marker-jump">Jump</span>
+                  </div>
+                  <div class="marker-row">
+                    <div class="marker-dot"></div>
+                    <span class="marker-name">Outro</span>
+                    <span class="marker-time">2:10 → end</span>
+                    <span class="marker-jump">Jump</span>
+                  </div>
+                  <div style="padding:8px; font-size:0.5rem; color:var(--muted); text-align:center; margin-top:6px;">
+                    Tap any marker to jump instantly — on stage or remote
+                  </div>
+                </div>
+                <div class="progress-bar-wrap">
+                  <span>0:32</span>
+                  <div class="progress-bar-track">
+                    <div class="progress-bar-fill" style="animation-duration:12s"></div>
+                  </div>
+                  <span>-2:40</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- SCENE 2: Next Cue -->
+            <div class="scene" id="scene-2">
+              <div class="toolbar">
+                <span class="toolbar-title">🔗 Next Cue Chain</span>
+                <div class="toolbar-actions">
+                  <div class="tb-btn">Edit</div>
+                </div>
+              </div>
+              <div class="now-playing-bar">
+                <span class="live-badge">LIVE</span>
+                <span class="np-title">Curtain Call</span>
+                <span class="np-time">2:54 / 3:00</span>
+              </div>
+              <div class="marker-list" style="padding:12px; gap:8px; flex:1; display:flex; flex-direction:column;">
+                <div style="font-size:0.55rem; color:var(--muted); letter-spacing:0.08em; text-transform:uppercase; margin-bottom:4px;">Chain configuration</div>
+
+                <div style="background:#1e1a2e; border:1px solid rgba(124,92,191,0.3); border-radius:10px; padding:10px 12px; display:flex; align-items:center; gap:8px;">
+                  <span style="font-size:0.7rem;">🎵</span>
+                  <div style="flex:1">
+                    <div style="font-size:0.6rem; font-weight:700;">Curtain Call</div>
+                    <div style="font-size:0.5rem; color:var(--muted);">Currently playing</div>
+                  </div>
+                  <span class="live-badge" style="font-size:0.45rem;">NOW</span>
+                </div>
+
+                <div style="text-align:center; font-size:0.7rem; color:var(--gold); padding:4px 0;">↓ auto-advances</div>
+
+                <div style="background:#1e1e26; border:1px solid rgba(201,168,76,0.2); border-radius:10px; padding:10px 12px; display:flex; align-items:center; gap:8px; animation: pulse-row 2s ease infinite;">
+                  <span style="font-size:0.7rem;">🎵</span>
+                  <div style="flex:1">
+                    <div style="font-size:0.6rem; font-weight:700;">Applause Loop</div>
+                    <div style="font-size:0.5rem; color:var(--muted);">Plays from → Audience SFX marker</div>
+                  </div>
+                  <span class="next-cue-badge">NEXT</span>
+                </div>
+
+                <div style="font-size:0.5rem; color:var(--muted); text-align:center; padding:8px; line-height:1.6;">
+                  When Curtain Call reaches its end, CueSuite automatically starts Applause Loop at the Audience SFX marker — zero human intervention required.
+                </div>
+
+                <div style="margin-top:auto; display:flex; gap:6px;">
+                  <div style="flex:1; background:rgba(201,168,76,0.1); border:1px solid rgba(201,168,76,0.2); border-radius:8px; padding:7px; text-align:center; font-size:0.55rem; font-weight:600; color:var(--gold); cursor:pointer;">Change Next Cue</div>
+                  <div style="flex:1; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.08); border-radius:8px; padding:7px; text-align:center; font-size:0.55rem; font-weight:600; color:var(--muted); cursor:pointer;">Remove Chain</div>
+                </div>
+              </div>
+              <div class="progress-bar-wrap">
+                <span>2:54</span>
+                <div class="progress-bar-track">
+                  <div class="progress-bar-fill" style="width:97%; animation:none;"></div>
+                </div>
+                <span>-0:06</span>
+              </div>
+            </div>
+
+            <!-- SCENE 4: Connecting -->
+            <div class="scene" id="scene-4">
+              <div class="toolbar">
+                <span class="toolbar-title">📡 Connect to CueSuite</span>
+              </div>
+              <div class="connect-scene">
+                <div style="font-size:0.55rem; color:var(--muted); text-align:center; max-width:200px; line-height:1.6; margin-bottom:8px;">
+                  Choose how to connect your iPhone to the iPad
+                </div>
+
+                <div class="connect-row">
+                  <div class="connect-icon" style="background:rgba(59,125,216,0.15);">📶</div>
+                  <div style="flex:1">
+                    <div class="connect-text">Scan for iPads on Wi-Fi</div>
+                    <div style="font-size:0.45rem; color:var(--muted); margin-top:2px;">Auto-discovers via Bonjour</div>
+                  </div>
+                  <span class="connect-arrow">›</span>
+                </div>
+
+                <div class="connect-row" style="border-color:rgba(201,168,76,0.25); background:#1e1c16;">
+                  <div class="connect-icon" style="background:rgba(201,168,76,0.15);">⌨️</div>
+                  <div style="flex:1">
+                    <div class="connect-text">Enter IP Manually</div>
+                    <div style="font-size:0.45rem; color:var(--muted); margin-top:2px;">Type the address from ⚙️ on iPad</div>
+                  </div>
+                  <span class="connect-arrow" style="color:var(--gold);">›</span>
+                </div>
+
+                <div class="connect-row">
+                  <div class="connect-icon" style="background:rgba(124,92,191,0.15);">🔵</div>
+                  <div style="flex:1">
+                    <div class="connect-text">Scan for Bluetooth iPads</div>
+                    <div style="font-size:0.45rem; color:var(--muted); margin-top:2px;">No Wi-Fi required</div>
+                  </div>
+                  <div class="connect-signal">
+                    <div class="sig-bar" style="height:4px;"></div>
+                    <div class="sig-bar" style="height:7px;"></div>
+                    <div class="sig-bar" style="height:10px;"></div>
+                  </div>
+                </div>
+
+                <div style="font-size:0.5rem; color:var(--muted); text-align:center; margin-top:6px; line-height:1.6;">
+                  Password protection optional · Last IP remembered
+                </div>
+              </div>
+            </div>
+
+          </div><!-- ipad-screen -->
+        </div><!-- ipad-mockup -->
+
+        <!-- iPhone shown for scene 3 -->
+        <div class="iphone-mockup" id="iphone-wrap" style="display:none;">
+          <div class="iphone-screen">
+            <div class="scene active" id="scene-3">
+              <div class="mobile-remote">
+                <div class="mr-connection">
+                  <div class="mr-dot"></div>
+                  <span class="mr-connected">Connected</span>
+                  <span style="color:var(--muted); margin-left:4px;">— Jeremy's iPad</span>
+                </div>
+                <div class="mr-now-playing">
+                  <div style="font-size:0.45rem; letter-spacing:0.12em; text-transform:uppercase; color:var(--muted); margin-bottom:4px;">NOW PLAYING</div>
+                  <div class="mr-cue-name">Act II — Opening</div>
+                  <div style="font-size:0.45rem; color:var(--purple2); margin-top:2px;">▶ Verse 1</div>
+                  <div class="mr-progress"><div class="mr-progress-fill"></div></div>
+                  <div class="mr-times"><span>1:24</span><span>-1:48</span></div>
+                  <div style="font-size:0.45rem; color:var(--muted); margin-top:3px;">Next: Curtain Call</div>
+                </div>
+                <div class="mr-transport">
+                  <div class="mr-btn stop" style="color:white; font-size:0.7rem;">■</div>
+                  <div class="mr-btn play" style="color:white; font-size:0.8rem; padding-left:3px;">❚❚</div>
+                  <div class="mr-btn fade" style="color:var(--orange); font-size:0.65rem;">🔇</div>
+                </div>
+
+                <div class="mr-markers">
+                  <div style="font-size:0.42rem; text-transform:uppercase; letter-spacing:0.1em; color:var(--muted); margin-bottom:3px;">MARKERS — tap to jump</div>
+                  <div class="mr-marker-btn" style="background:rgba(124,92,191,0.8);">▶ Verse 1 &nbsp; 0:00</div>
+                  <div class="mr-marker-btn" style="background:rgba(124,92,191,0.5);">Chorus &nbsp; 0:45</div>
+                  <div class="mr-marker-btn" style="background:rgba(124,92,191,0.5);">Bridge &nbsp; 1:30</div>
+                </div>
+
+                <div class="mr-cue-list">
+                  <div class="mr-cue-list-title">ALL CUES — tap to play</div>
+                  <div class="mr-cue-item active">
+                    <span style="font-size:0.5rem; color:var(--blue);">▶</span>
+                    <span class="mr-cue-name-text">Act II — Opening Music</span>
+                    <span class="mr-marker-badge">3 markers</span>
+                  </div>
+                  <div class="mr-cue-item">
+                    <span style="font-size:0.5rem; color:var(--muted);">▷</span>
+                    <span class="mr-cue-name-text">Scene Change SFX</span>
+                  </div>
+                  <div class="mr-cue-item">
+                    <span style="font-size:0.5rem; color:var(--muted);">▷</span>
+                    <span class="mr-cue-name-text">Curtain Call</span>
+                    <span class="mr-marker-badge">2 markers</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div><!-- iphone-mockup -->
+      </div><!-- mockup-wrap -->
+
+      <!-- CAPTION -->
+      <div class="demo-caption" id="demo-caption">
+        <div class="demo-caption-step" id="caption-step">Step 1 of 5</div>
+        <div class="demo-caption-title" id="caption-title">The Cue Grid</div>
+        <div class="demo-caption-body" id="caption-body">Your show lives here. Every sound cue is a tap away, laid out in a responsive grid that fills your iPad screen. The playing cue shows a live gold progress bar. Tap any other cue to switch instantly.</div>
+      </div>
+
+    </div><!-- demo-stage -->
+
+    <div class="progress-dots">
+      <div class="pdot active" onclick="showScene(0, document.querySelectorAll('.scene-btn')[0])"></div>
+      <div class="pdot" onclick="showScene(1, document.querySelectorAll('.scene-btn')[1])"></div>
+      <div class="pdot" onclick="showScene(2, document.querySelectorAll('.scene-btn')[2])"></div>
+      <div class="pdot" onclick="showScene(3, document.querySelectorAll('.scene-btn')[3])"></div>
+      <div class="pdot" onclick="showScene(4, document.querySelectorAll('.scene-btn')[4])"></div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer class="footer">
+  <div class="footer-brand">Cue<em>Suite</em></div>
+  <p class="footer-sub">Professional sound cue management for iPad · Remote control for iPhone</p>
+  <div class="footer-links">
+    <a href="CueSuite-Support.html">Support</a>
+    <a href="CueSuite-Privacy-Policy.html">Privacy</a>
+    <a href="CueSuite-Mobile-Support.html">Mobile Support</a>
+    <a href="mailto:support@cornerstonelabs.info">Contact</a>
+  </div>
+</footer>
+
+<script>
+const scenes = [
+  {
+    step: "Step 1 of 5",
+    title: "The Cue Grid",
+    body: "Your show lives here. Every sound cue is a tap away, laid out in a responsive grid that fills your iPad screen. The playing cue shows a live gold progress bar — and the grid locks during playback so nothing gets accidentally moved.",
+    useIpad: true
+  },
+  {
+    step: "Step 2 of 5",
+    title: "Named Markers",
+    body: "Add as many markers as you need inside any cue. Each has a name, a start time, and an optional end time. Tap a marker to jump there instantly — the audio snaps to that exact position with no gap.",
+    useIpad: true
+  },
+  {
+    step: "Step 3 of 5",
+    title: "Next Cue Chaining",
+    body: "Link cues together so the show runs itself. When one cue ends, the next starts automatically — even entering the next cue at a specific marker. Perfect for continuous underscore or multi-part sequences.",
+    useIpad: true
+  },
+  {
+    step: "Step 4 of 5",
+    title: "Mobile Remote",
+    body: "CueSuite Mobile on iPhone gives you the full picture — now-playing card with live progress, all cues at a glance, marker jump buttons, and transport controls. Run the board from the back of the house.",
+    useIpad: false
+  },
+  {
+    step: "Step 5 of 5",
+    title: "Wi-Fi & Bluetooth",
+    body: "Connect over Wi-Fi for fast automatic discovery via Bonjour, type the IP manually, or go completely cable-free with Bluetooth LE — no network required. Password-protect remote access for added security.",
+    useIpad: true
+  }
+];
+
+let currentScene = 0;
+let autoTimer = null;
+
+function showScene(index, btn) {
+  clearTimeout(autoTimer);
+
+  // hide all scenes in both mockups
+  document.querySelectorAll('.scene').forEach(s => s.classList.remove('active'));
+
+  // swap mockups
+  const ipadWrap = document.getElementById('ipad-wrap');
+  const iphoneWrap = document.getElementById('iphone-wrap');
+  const data = scenes[index];
+
+  if (data.useIpad) {
+    ipadWrap.style.display = '';
+    iphoneWrap.style.display = 'none';
+    const target = document.getElementById(`scene-${index}`);
+    if (target) target.classList.add('active');
+  } else {
+    ipadWrap.style.display = 'none';
+    iphoneWrap.style.display = '';
+    // scene-3 is always inside iphone
+    document.getElementById('scene-3').classList.add('active');
+  }
+
+  // update caption
+  document.getElementById('caption-step').textContent = data.step;
+  document.getElementById('caption-title').textContent = data.title;
+  document.getElementById('caption-body').textContent = data.body;
+
+  // update buttons
+  document.querySelectorAll('.scene-btn').forEach((b, i) => {
+    b.classList.toggle('active', i === index);
+  });
+
+  // update dots
+  document.querySelectorAll('.pdot').forEach((d, i) => {
+    d.classList.toggle('active', i === index);
+  });
+
+  currentScene = index;
+  scheduleAuto();
+}
+
+function scheduleAuto() {
+  autoTimer = setTimeout(() => {
+    const next = (currentScene + 1) % scenes.length;
+    showScene(next, document.querySelectorAll('.scene-btn')[next]);
+  }, 6000);
+}
+
+// Scroll reveal
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('visible');
+      observer.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+// Start auto-advance
+scheduleAuto();
+</script>
+</body>
+</html>
