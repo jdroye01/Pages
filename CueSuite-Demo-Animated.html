@@ -1,0 +1,2113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>ChurchScore Live — Animated Demo</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --bg: #09090b;
+    --bg2: #101114;
+    --panel: #16181d;
+    --panel2: #1d2128;
+    --border: rgba(255,255,255,0.08);
+    --gold: #c9a84c;
+    --gold2: #ecd287;
+    --cream: #f4efe6;
+    --blue: #4b8ef0;
+    --blue2: #7caef8;
+    --green: #2ea87e;
+    --green2: #51c997;
+    --purple: #8d6ad3;
+    --orange: #df8a41;
+    --red: #d95b5b;
+    --text: #ebe6dd;
+    --muted: #8e8a83;
+    --radius: 22px;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; background: var(--bg); }
+
+  body {
+    font-family: 'Syne', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.3;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  }
+
+  a { color: inherit; }
+
+  .hero {
+    min-height: 100vh;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5rem 2rem 3rem;
+    overflow: hidden;
+    text-align: center;
+  }
+
+  .hero-bg,
+  .hero-grid,
+  .hero-orbit {
+    position: absolute;
+    inset: 0;
+  }
+
+  .hero-bg {
+    background:
+      radial-gradient(ellipse 70% 56% at 50% 2%, rgba(46,168,126,0.12) 0%, transparent 62%),
+      radial-gradient(ellipse 38% 60% at 82% 70%, rgba(75,142,240,0.12) 0%, transparent 58%),
+      radial-gradient(ellipse 42% 50% at 18% 70%, rgba(141,106,211,0.1) 0%, transparent 58%);
+  }
+
+  .hero-grid {
+    background-image:
+      linear-gradient(rgba(201,168,76,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(201,168,76,0.03) 1px, transparent 1px);
+    background-size: 64px 64px;
+    animation: grid-drift 20s linear infinite;
+  }
+
+  .hero-orbit { pointer-events: none; overflow: hidden; }
+
+  .orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(12px);
+    opacity: 0.55;
+    mix-blend-mode: screen;
+    animation: orb-drift 16s ease-in-out infinite;
+  }
+
+  .orb.one {
+    width: 240px;
+    height: 240px;
+    top: 12%;
+    left: 8%;
+    background: radial-gradient(circle at 35% 35%, rgba(46,168,126,0.35), transparent 68%);
+  }
+
+  .orb.two {
+    width: 320px;
+    height: 320px;
+    right: 4%;
+    bottom: 6%;
+    background: radial-gradient(circle at 42% 42%, rgba(75,142,240,0.28), transparent 72%);
+    animation-delay: -5s;
+  }
+
+  .orb.three {
+    width: 170px;
+    height: 170px;
+    right: 24%;
+    top: 18%;
+    background: radial-gradient(circle at 42% 42%, rgba(201,168,76,0.26), transparent 72%);
+    animation-delay: -9s;
+  }
+
+  @keyframes grid-drift {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(64px); }
+  }
+
+  @keyframes orb-drift {
+    0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+    50% { transform: translate3d(0, -20px, 0) scale(1.05); }
+  }
+
+  .hero-inner {
+    position: relative;
+    z-index: 2;
+    max-width: 920px;
+  }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    font-size: 0.72rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--gold);
+    border: 1px solid rgba(201,168,76,0.25);
+    border-radius: 999px;
+    padding: 0.38rem 1rem;
+    margin-bottom: 1.8rem;
+    animation: fade-up 0.8s ease both;
+  }
+
+  .eyebrow::before {
+    content: "";
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--gold);
+    animation: pulse-dot 2s ease infinite;
+  }
+
+  .hero-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(3.4rem, 8vw, 6.6rem);
+    line-height: 0.94;
+    letter-spacing: -0.04em;
+    margin-bottom: 1.25rem;
+    animation: fade-up 0.9s 0.08s ease both;
+  }
+
+  .hero-title em {
+    display: block;
+    font-style: italic;
+    color: var(--gold2);
+  }
+
+  .hero-sub {
+    max-width: 640px;
+    margin: 0 auto 2rem;
+    color: var(--muted);
+    font-size: 1.05rem;
+    line-height: 1.8;
+    animation: fade-up 0.9s 0.18s ease both;
+  }
+
+  .hero-cta {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.8rem;
+    animation: fade-up 0.9s 0.28s ease both;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    padding: 0.9rem 1.8rem;
+    border-radius: 999px;
+    font-size: 0.9rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    text-decoration: none;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+    border: 1px solid transparent;
+  }
+
+  .btn-primary {
+    background: var(--gold);
+    color: #0b0b0e;
+  }
+
+  .btn-primary:hover {
+    background: var(--gold2);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 26px rgba(201,168,76,0.28);
+  }
+
+  .btn-secondary {
+    background: rgba(255,255,255,0.05);
+    border-color: rgba(255,255,255,0.08);
+    color: var(--text);
+    backdrop-filter: blur(8px);
+  }
+
+  .btn-secondary:hover {
+    background: rgba(255,255,255,0.08);
+    transform: translateY(-2px);
+  }
+
+  .stats {
+    max-width: 1100px;
+    margin: -1.8rem auto 0;
+    padding: 0 2rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+    gap: 1rem;
+    position: relative;
+    z-index: 2;
+  }
+
+  .stat {
+    background: rgba(22,24,29,0.92);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 1.3rem 1.2rem;
+    text-align: center;
+    box-shadow: 0 16px 38px rgba(0,0,0,0.28);
+  }
+
+  .stat-num {
+    font-family: 'Playfair Display', serif;
+    color: var(--gold2);
+    font-size: 2.3rem;
+    line-height: 1;
+    margin-bottom: 0.35rem;
+  }
+
+  .stat-label {
+    color: var(--muted);
+    font-size: 0.76rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  .section {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 7.5rem 2rem;
+  }
+
+  .section-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    font-size: 0.72rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 0.7rem;
+  }
+
+  .section-label::before {
+    content: "";
+    width: 22px;
+    height: 1px;
+    background: var(--gold);
+  }
+
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.1rem, 5vw, 3.8rem);
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+    margin-bottom: 0.95rem;
+  }
+
+  .section-title em {
+    font-style: italic;
+    color: var(--gold2);
+  }
+
+  .section-body {
+    max-width: 640px;
+    color: var(--muted);
+    line-height: 1.8;
+    font-size: 1rem;
+  }
+
+  .feature-grid {
+    margin-top: 2.6rem;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1rem;
+  }
+
+  .feature-card,
+  .setup-card,
+  .resource-card {
+    background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 1.3rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .feature-card::before,
+  .setup-card::before,
+  .resource-card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(120deg, rgba(201,168,76,0.08), transparent 40%, rgba(75,142,240,0.06));
+    opacity: 0;
+    transition: opacity 0.2s ease;
+  }
+
+  .feature-card:hover::before,
+  .setup-card:hover::before,
+  .resource-card:hover::before {
+    opacity: 1;
+  }
+
+  .feature-card:hover,
+  .setup-card:hover,
+  .resource-card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(201,168,76,0.18);
+  }
+
+  .feature-card,
+  .setup-card,
+  .resource-card { transition: transform 0.2s ease, border-color 0.2s ease; }
+
+  .feature-icon {
+    font-size: 1.25rem;
+    margin-bottom: 0.9rem;
+    display: inline-flex;
+  }
+
+  .feature-name,
+  .setup-title,
+  .resource-title {
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 0.55rem;
+  }
+
+  .feature-desc,
+  .setup-body,
+  .resource-body {
+    color: var(--muted);
+    font-size: 0.9rem;
+    line-height: 1.7;
+  }
+
+  .feature-tag,
+  .setup-step {
+    display: inline-flex;
+    margin-top: 1rem;
+    padding: 0.26rem 0.62rem;
+    border-radius: 999px;
+    border: 1px solid rgba(201,168,76,0.18);
+    color: var(--gold);
+    font-size: 0.64rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .split {
+    display: grid;
+    grid-template-columns: 0.95fr 1.05fr;
+    gap: 2rem;
+    align-items: start;
+  }
+
+  .setup-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+  }
+
+  .timeline-section {
+    background: var(--bg2);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 7.5rem 2rem;
+  }
+
+  .timeline-inner {
+    max-width: 1150px;
+    margin: 0 auto;
+  }
+
+  .demo-shell {
+    margin-top: 1.3rem;
+    padding: 1rem;
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 24px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+  }
+
+  .demo-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+    padding-bottom: 0.95rem;
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+  }
+
+  .demo-status {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+  }
+
+  .demo-status-dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--green2);
+    box-shadow: 0 0 0 0 rgba(81,201,151,0.42);
+    animation: status-pulse 2.3s ease infinite;
+  }
+
+  @keyframes status-pulse {
+    0% { box-shadow: 0 0 0 0 rgba(81,201,151,0.42); }
+    70% { box-shadow: 0 0 0 10px rgba(81,201,151,0); }
+    100% { box-shadow: 0 0 0 0 rgba(81,201,151,0); }
+  }
+
+  .demo-status-title {
+    font-size: 0.92rem;
+    font-weight: 700;
+  }
+
+  .demo-status-sub {
+    color: var(--muted);
+    font-size: 0.73rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .demo-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.65rem;
+    padding: 0.55rem 0.82rem;
+    border-radius: 999px;
+    border: 1px solid rgba(255,255,255,0.08);
+    background: rgba(255,255,255,0.03);
+    color: var(--text);
+    cursor: pointer;
+    font-family: 'Syne', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 700;
+  }
+
+  .toggle-pill {
+    width: 32px;
+    height: 18px;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.12);
+    position: relative;
+    transition: background 0.2s ease;
+  }
+
+  .toggle-pill::after {
+    content: "";
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: var(--cream);
+    transition: transform 0.2s ease;
+  }
+
+  .demo-toggle[data-playing="true"] .toggle-pill {
+    background: rgba(81,201,151,0.25);
+  }
+
+  .demo-toggle[data-playing="true"] .toggle-pill::after {
+    transform: translateX(14px);
+    background: var(--green2);
+  }
+
+  .demo-progress {
+    margin-top: 0.9rem;
+    height: 4px;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.08);
+    overflow: hidden;
+  }
+
+  .demo-progress-fill {
+    width: 0%;
+    height: 100%;
+    background: linear-gradient(90deg, var(--green), var(--gold));
+  }
+
+  .timeline-controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.55rem;
+    margin-top: 1rem;
+  }
+
+  .scene-btn {
+    border: 1px solid rgba(255,255,255,0.1);
+    background: transparent;
+    color: var(--muted);
+    border-radius: 999px;
+    padding: 0.58rem 1.15rem;
+    font-family: 'Syne', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .scene-btn.active,
+  .scene-btn:hover {
+    background: var(--gold);
+    color: #0b0b0e;
+    border-color: var(--gold);
+  }
+
+  .demo-stage {
+    margin-top: 2rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    align-items: flex-start;
+  }
+
+  .ipad-mockup {
+    width: min(700px, 92vw);
+    background: #1b1d22;
+    border-radius: 30px;
+    border: 2px solid rgba(255,255,255,0.1);
+    padding: 20px;
+    position: relative;
+    box-shadow: 0 42px 88px rgba(0,0,0,0.66);
+    animation: device-float 7s ease-in-out infinite;
+  }
+
+  .ipad-mockup::before {
+    content: "";
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 62px;
+    height: 4px;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.14);
+  }
+
+  .ipad-screen {
+    background: #0f1115;
+    border-radius: 20px;
+    overflow: hidden;
+    aspect-ratio: 4 / 3;
+    position: relative;
+  }
+
+  @keyframes device-float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+  }
+
+  .scene {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.55s ease;
+  }
+
+  .scene.active {
+    opacity: 1;
+    pointer-events: all;
+  }
+
+  .scene.active .stage-card,
+  .scene.active .table-row,
+  .scene.active .metric,
+  .scene.active .picker-chip,
+  .scene.active .step-panel,
+  .scene.active .report-line {
+    animation: scene-rise 0.48s ease both;
+  }
+
+  @keyframes scene-rise {
+    from { opacity: 0; transform: translateY(10px) scale(0.985); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  .toolbar {
+    background: #0c0d11;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    padding: 10px 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .toolbar-title {
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .toolbar-actions {
+    display: flex;
+    gap: 6px;
+  }
+
+  .tb-btn {
+    width: 24px;
+    height: 24px;
+    border-radius: 7px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.06);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--muted);
+    font-size: 0.58rem;
+  }
+
+  .tb-btn.green {
+    background: rgba(46,168,126,0.14);
+    color: var(--green2);
+    border-color: rgba(46,168,126,0.18);
+  }
+
+  .status-bar {
+    background: linear-gradient(135deg, #162018, #14181e);
+    border-bottom: 1px solid rgba(81,201,151,0.12);
+    padding: 8px 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.7rem;
+    font-size: 0.58rem;
+  }
+
+  .live-pill,
+  .mini-tag,
+  .scene-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.2rem 0.45rem;
+    border-radius: 999px;
+    font-size: 0.48rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-weight: 800;
+  }
+
+  .live-pill {
+    background: rgba(81,201,151,0.16);
+    color: var(--green2);
+    border: 1px solid rgba(81,201,151,0.2);
+  }
+
+  .mini-tag {
+    background: rgba(201,168,76,0.12);
+    color: var(--gold);
+    border: 1px solid rgba(201,168,76,0.18);
+  }
+
+  .scene-shell {
+    padding: 14px;
+    height: calc(100% - 82px);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    background:
+      radial-gradient(circle at top right, rgba(75,142,240,0.08), transparent 30%),
+      linear-gradient(180deg, #101318, #0e1015);
+  }
+
+  .stage-card {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 16px;
+    padding: 12px;
+  }
+
+  .top-grid {
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 12px;
+  }
+
+  .metric-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  .metric {
+    background: #171b22;
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 12px;
+    padding: 10px;
+  }
+
+  .metric-label {
+    color: var(--muted);
+    font-size: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 0.3rem;
+  }
+
+  .metric-value {
+    font-size: 1rem;
+    font-weight: 800;
+  }
+
+  .metric-value.gold { color: var(--gold2); }
+  .metric-value.green { color: var(--green2); }
+  .metric-value.blue { color: var(--blue2); }
+
+  .list-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+  }
+
+  .card-title {
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+  }
+
+  .card-sub {
+    color: var(--muted);
+    font-size: 0.52rem;
+  }
+
+  .table-list {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+  }
+
+  .table-row {
+    display: grid;
+    gap: 8px;
+    align-items: center;
+    background: #171b22;
+    border: 1px solid rgba(255,255,255,0.05);
+    border-radius: 12px;
+    padding: 9px 10px;
+  }
+
+  .row-roster { grid-template-columns: 1.5fr 1fr auto; }
+  .row-report { grid-template-columns: 1.4fr 1fr 1fr; }
+  .row-action { grid-template-columns: 1.15fr repeat(4, 0.5fr); }
+  .row-setup { grid-template-columns: 0.55fr 1.45fr auto; }
+
+  .row-title {
+    font-size: 0.62rem;
+    font-weight: 700;
+    line-height: 1.25;
+  }
+
+  .row-meta {
+    color: var(--muted);
+    font-size: 0.5rem;
+    line-height: 1.35;
+  }
+
+  .row-pill {
+    justify-self: start;
+    padding: 0.22rem 0.46rem;
+    border-radius: 999px;
+    background: rgba(75,142,240,0.14);
+    color: var(--blue2);
+    border: 1px solid rgba(75,142,240,0.18);
+    font-size: 0.46rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-weight: 800;
+  }
+
+  .row-points {
+    justify-self: end;
+    color: var(--gold2);
+    font-size: 0.64rem;
+    font-weight: 800;
+  }
+
+  .picker-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+
+  .picker-chip {
+    padding: 0.42rem 0.72rem;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.06);
+    color: var(--muted);
+    font-size: 0.52rem;
+    font-weight: 700;
+  }
+
+  .picker-chip.active {
+    background: rgba(201,168,76,0.18);
+    border-color: rgba(201,168,76,0.24);
+    color: var(--gold2);
+  }
+
+  .toggle-dot {
+    width: 18px;
+    height: 18px;
+    border-radius: 6px;
+    border: 1px solid rgba(255,255,255,0.08);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.52rem;
+    color: rgba(255,255,255,0.18);
+    background: rgba(255,255,255,0.03);
+  }
+
+  .toggle-dot.on {
+    color: #08100a;
+    background: var(--green2);
+    border-color: rgba(81,201,151,0.4);
+  }
+
+  .split-lower {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  .profile-shell {
+    display: grid;
+    grid-template-columns: 92px 1fr;
+    gap: 12px;
+    align-items: center;
+  }
+
+  .avatar {
+    width: 92px;
+    height: 92px;
+    border-radius: 50%;
+    background:
+      radial-gradient(circle at 30% 30%, rgba(236,210,135,0.3), transparent 45%),
+      linear-gradient(135deg, #1f2630, #11151b);
+    border: 2px solid rgba(201,168,76,0.25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.7rem;
+  }
+
+  .profile-name {
+    font-size: 0.88rem;
+    font-weight: 800;
+    margin-bottom: 0.35rem;
+  }
+
+  .profile-meta {
+    color: var(--muted);
+    font-size: 0.53rem;
+    line-height: 1.5;
+  }
+
+  .tier-strip {
+    margin-top: 10px;
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+
+  .tier-token {
+    padding: 0.28rem 0.5rem;
+    border-radius: 999px;
+    font-size: 0.48rem;
+    border: 1px solid rgba(255,255,255,0.07);
+    color: var(--muted);
+    background: rgba(255,255,255,0.03);
+  }
+
+  .tier-token.active {
+    color: var(--gold2);
+    border-color: rgba(201,168,76,0.24);
+    background: rgba(201,168,76,0.14);
+  }
+
+  .step-shell {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .step-panel {
+    background: #171b22;
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 14px;
+    padding: 12px;
+  }
+
+  .step-index {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: rgba(201,168,76,0.14);
+    color: var(--gold2);
+    font-size: 0.62rem;
+    font-weight: 800;
+    margin-bottom: 0.65rem;
+  }
+
+  .step-title {
+    font-size: 0.64rem;
+    font-weight: 800;
+    margin-bottom: 0.35rem;
+  }
+
+  .step-copy {
+    color: var(--muted);
+    font-size: 0.5rem;
+    line-height: 1.5;
+  }
+
+  .report-line {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.53rem;
+    line-height: 1.7;
+    color: #d8d4cc;
+    padding: 6px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+  }
+
+  .report-line:last-child { border-bottom: none; }
+
+  .export-strip {
+    display: flex;
+    gap: 8px;
+    margin-top: 10px;
+  }
+
+  .export-btn {
+    flex: 1;
+    text-align: center;
+    border-radius: 10px;
+    padding: 0.62rem;
+    font-size: 0.54rem;
+    font-weight: 800;
+    letter-spacing: 0.05em;
+  }
+
+  .export-btn.pdf {
+    background: rgba(75,142,240,0.16);
+    color: var(--blue2);
+    border: 1px solid rgba(75,142,240,0.18);
+  }
+
+  .export-btn.csv {
+    background: rgba(46,168,126,0.16);
+    color: var(--green2);
+    border: 1px solid rgba(46,168,126,0.18);
+  }
+
+  .sync-rail {
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 12px;
+  }
+
+  .sync-card {
+    background: #171b22;
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 14px;
+    padding: 12px;
+  }
+
+  .sync-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 9px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    font-size: 0.55rem;
+  }
+
+  .sync-row:last-child { border-bottom: none; }
+
+  .sync-left { display: flex; align-items: center; gap: 8px; }
+
+  .sync-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--green2);
+    box-shadow: 0 0 0 0 rgba(81,201,151,0.38);
+    animation: pulse-dot 1.8s ease infinite;
+  }
+
+  .sync-dot.orange { background: var(--orange); box-shadow: none; }
+  .sync-dot.blue { background: var(--blue2); box-shadow: none; }
+
+  .mono { font-family: 'JetBrains Mono', monospace; }
+
+  .demo-caption {
+    flex: 1;
+    min-width: 240px;
+    padding-top: 0.6rem;
+  }
+
+  .demo-caption.animating { animation: caption-swap 0.35s ease; }
+
+  @keyframes caption-swap {
+    from { opacity: 0.55; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .demo-step {
+    color: var(--gold);
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    font-size: 0.66rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .demo-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.9rem;
+    line-height: 1.1;
+    margin-bottom: 0.75rem;
+  }
+
+  .demo-body {
+    color: var(--muted);
+    line-height: 1.8;
+    font-size: 0.95rem;
+  }
+
+  .progress-dots {
+    display: flex;
+    gap: 6px;
+    justify-content: center;
+    margin-top: 1.6rem;
+  }
+
+  .pdot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.2);
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .pdot.active {
+    width: 24px;
+    border-radius: 4px;
+    background: var(--gold);
+  }
+
+  .resource-grid {
+    margin-top: 2.3rem;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1rem;
+  }
+
+  .resource-link {
+    margin-top: 1rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    color: var(--gold2);
+    text-decoration: none;
+    font-size: 0.84rem;
+    font-weight: 700;
+  }
+
+  .footer {
+    border-top: 1px solid var(--border);
+    text-align: center;
+    padding: 4rem 2rem;
+  }
+
+  .footer-brand {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    margin-bottom: 0.45rem;
+  }
+
+  .footer-brand em { color: var(--gold2); font-style: italic; }
+
+  .footer-sub {
+    color: var(--muted);
+    font-size: 0.86rem;
+    max-width: 620px;
+    margin: 0 auto;
+    line-height: 1.7;
+  }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(28px);
+    transition: opacity 0.75s ease, transform 0.75s ease;
+  }
+
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  @keyframes fade-up {
+    from { opacity: 0; transform: translateY(22px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes pulse-dot {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.6; transform: scale(0.75); }
+  }
+
+  @media (max-width: 980px) {
+    .split,
+    .top-grid,
+    .sync-rail,
+    .resource-grid,
+    .feature-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .setup-grid,
+    .split-lower,
+    .step-shell {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 720px) {
+    .hero-title { font-size: 3.1rem; }
+    .demo-stage { flex-direction: column; }
+    .ipad-mockup { width: 100%; }
+    .metric-grid { grid-template-columns: 1fr; }
+    .profile-shell { grid-template-columns: 1fr; }
+    .row-roster,
+    .row-report,
+    .row-action,
+    .row-setup {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+</head>
+<body>
+
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-orbit">
+    <div class="orb one"></div>
+    <div class="orb two"></div>
+    <div class="orb three"></div>
+  </div>
+
+  <div class="hero-inner">
+    <div class="eyebrow">ChurchScore Live · iPad · Sync Ready</div>
+    <h1 class="hero-title">ChurchScore<em>Live</em></h1>
+    <p class="hero-sub">
+      A polished walkthrough for the church scoring app: class setup, member roster, detailed profiles, live point awarding, quarterly reporting, sync status, and guided imports with a ready-to-use Excel template.
+    </p>
+    <div class="hero-cta">
+      <a class="btn btn-primary" href="#demo">▶ Watch Demo</a>
+      <a class="btn btn-secondary" href="outputs/churchscore-guide-2026-04-28/ChurchScore_Import_Template.xlsx">↓ Import Template</a>
+      <a class="btn btn-secondary" href="outputs/churchscore-guide-2026-04-28/ChurchScore_How_To_Guide.md">Read Setup Guide</a>
+    </div>
+  </div>
+</section>
+
+<div class="stats reveal">
+  <div class="stat">
+    <div class="stat-num">4</div>
+    <div class="stat-label">Core Tabs</div>
+  </div>
+  <div class="stat">
+    <div class="stat-num">CSV</div>
+    <div class="stat-label">and Excel Imports</div>
+  </div>
+  <div class="stat">
+    <div class="stat-num">Live</div>
+    <div class="stat-label">Sync Status</div>
+  </div>
+  <div class="stat">
+    <div class="stat-num">PDF</div>
+    <div class="stat-label">or CSV Reports</div>
+  </div>
+</div>
+
+<section class="section reveal">
+  <div class="section-label">Feature Overview</div>
+  <h2 class="section-title">Built for ministry teams that need<br><em>clarity, speed, and consistency.</em></h2>
+  <p class="section-body">
+    ChurchScore Live keeps the operational loop simple: define classes, add members, create point actions, assign tiers, award points during service, and export reports when leadership needs a snapshot.
+  </p>
+
+  <div class="feature-grid">
+    <div class="feature-card">
+      <div class="feature-icon">👥</div>
+      <div class="feature-name">Class-Based Rosters</div>
+      <div class="feature-desc">Filter members by class so attendance and scoring stay focused on the right group.</div>
+      <div class="feature-tag">Members</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">⭐</div>
+      <div class="feature-name">Point Award Grid</div>
+      <div class="feature-desc">Award multiple actions across a class with one structured matrix and a single submit action.</div>
+      <div class="feature-tag">Points</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🏅</div>
+      <div class="feature-name">Tier Tracking</div>
+      <div class="feature-desc">Surface a member’s current tier from lifetime points using milestone thresholds you define.</div>
+      <div class="feature-tag">Recognition</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🧾</div>
+      <div class="feature-name">Quick and Custom Reports</div>
+      <div class="feature-desc">Generate monthly or quarterly rollups, class summaries, and filtered exports for selected members and actions.</div>
+      <div class="feature-tag">Reports</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🖼️</div>
+      <div class="feature-name">Member Detail Profiles</div>
+      <div class="feature-desc">Store member photos, recent attendance stats, lifetime points, current class, and tier in one view.</div>
+      <div class="feature-tag">Profiles</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">📥</div>
+      <div class="feature-name">Structured Imports</div>
+      <div class="feature-desc">Load members, actions, and tiers from CSV or Excel using a template that matches the current app behavior.</div>
+      <div class="feature-tag">Setup</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🔄</div>
+      <div class="feature-name">Live Sync Status</div>
+      <div class="feature-desc">Show real-time connection health, last sync, and queued offline changes before a full pull from server.</div>
+      <div class="feature-tag">Sync</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">📤</div>
+      <div class="feature-name">PDF and CSV Export</div>
+      <div class="feature-desc">Share generated report files directly from the app with a built-in export and share flow.</div>
+      <div class="feature-tag">Share</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">⚙️</div>
+      <div class="feature-name">Admin-Centered Settings</div>
+      <div class="feature-desc">Classes, members, actions, tiers, imports, and sync controls all live in one admin screen.</div>
+      <div class="feature-tag">Operations</div>
+    </div>
+  </div>
+</section>
+
+<section class="section reveal">
+  <div class="split">
+    <div>
+      <div class="section-label">Detailed Setup</div>
+      <h2 class="section-title">A clean first-run path for<br><em>staff, volunteers, and admins.</em></h2>
+      <p class="section-body">
+        This page is not just marketing. It is meant to explain the full onboarding sequence so a new team can get ChurchScore Live running without guessing which step comes first.
+      </p>
+    </div>
+
+    <div class="setup-grid">
+      <div class="setup-card">
+        <div class="setup-step">Step 1</div>
+        <div class="setup-title">Configure Live Sync</div>
+        <div class="setup-body">Open Settings, enter the sync server URL, and verify the status light changes from disconnected to connected.</div>
+      </div>
+      <div class="setup-card">
+        <div class="setup-step">Step 2</div>
+        <div class="setup-title">Create or Import Classes</div>
+        <div class="setup-body">Define your ministry group structure first so every new member has a clean destination from day one.</div>
+      </div>
+      <div class="setup-card">
+        <div class="setup-step">Step 3</div>
+        <div class="setup-title">Add Point Actions</div>
+        <div class="setup-body">Set up the repeatable scoring rules such as attendance, memory verse, guest invite, or leadership participation.</div>
+      </div>
+      <div class="setup-card">
+        <div class="setup-step">Step 4</div>
+        <div class="setup-title">Define Tiers</div>
+        <div class="setup-body">Create milestone names like Bronze, Silver, and Gold so progress can be celebrated clearly from the member screen.</div>
+      </div>
+      <div class="setup-card">
+        <div class="setup-step">Step 5</div>
+        <div class="setup-title">Load Members</div>
+        <div class="setup-body">Import a roster or add members manually, then verify they appear under the correct class in the Members tab.</div>
+      </div>
+      <div class="setup-card">
+        <div class="setup-step">Step 6</div>
+        <div class="setup-title">Run a Test Service</div>
+        <div class="setup-body">Award points, open a member detail view, confirm the tier logic, and generate a report before using it live.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="timeline-section" id="demo">
+  <div class="timeline-inner">
+    <div class="reveal">
+      <div class="section-label">Animated Demo</div>
+      <h2 class="section-title">Walk through the full workflow.</h2>
+      <p class="section-body">This guided sequence covers setup, member management, live point entry, reporting, and import resources using the CueSuite page as the visual reference only.</p>
+    </div>
+
+    <div class="demo-shell reveal" style="transition-delay:0.1s">
+      <div class="demo-meta">
+        <div class="demo-status">
+          <span class="demo-status-dot"></span>
+          <div>
+            <div class="demo-status-title">ChurchScore Live Product Walkthrough</div>
+            <div class="demo-status-sub">6 scenes · autoplay supported · keyboard arrows + spacebar</div>
+          </div>
+        </div>
+
+        <button class="demo-toggle" id="demo-toggle" data-playing="true" type="button" onclick="toggleAutoplay()">
+          <span id="toggle-label">Auto-play on</span>
+          <span class="toggle-pill" aria-hidden="true"></span>
+        </button>
+      </div>
+
+      <div class="demo-progress" aria-hidden="true">
+        <div class="demo-progress-fill" id="demo-progress-fill"></div>
+      </div>
+
+      <div class="timeline-controls">
+        <button class="scene-btn active" onclick="showScene(0)">⚙️ Setup</button>
+        <button class="scene-btn" onclick="showScene(1)">👥 Members</button>
+        <button class="scene-btn" onclick="showScene(2)">🏅 Member Detail</button>
+        <button class="scene-btn" onclick="showScene(3)">⭐ Award Points</button>
+        <button class="scene-btn" onclick="showScene(4)">🧾 Reports</button>
+        <button class="scene-btn" onclick="showScene(5)">📥 Import + Sync</button>
+      </div>
+    </div>
+
+    <div class="demo-stage reveal" style="transition-delay:0.2s">
+      <div class="ipad-mockup">
+        <div class="ipad-screen">
+
+          <div class="scene active" id="scene-0">
+            <div class="toolbar">
+              <span class="toolbar-title">ChurchScore Live · Settings</span>
+              <div class="toolbar-actions">
+                <div class="tb-btn">←</div>
+                <div class="tb-btn green">✓</div>
+                <div class="tb-btn">⚙</div>
+              </div>
+            </div>
+            <div class="status-bar">
+              <span class="live-pill">Connected</span>
+              <span class="mono">ws://100.x.x.x:8080</span>
+              <span class="mini-tag">Pull Full Sync Ready</span>
+            </div>
+            <div class="scene-shell">
+              <div class="top-grid">
+                <div class="stage-card">
+                  <div class="list-head">
+                    <div>
+                      <div class="card-title">Startup Checklist</div>
+                      <div class="card-sub">Recommended order for a new deployment</div>
+                    </div>
+                    <span class="scene-badge mini-tag">Admin</span>
+                  </div>
+                  <div class="table-list">
+                    <div class="table-row row-setup">
+                      <div class="step-index">1</div>
+                      <div>
+                        <div class="row-title">Set server URL</div>
+                        <div class="row-meta">Enter the WebSocket address and reconnect.</div>
+                      </div>
+                      <div class="row-pill">Sync</div>
+                    </div>
+                    <div class="table-row row-setup">
+                      <div class="step-index">2</div>
+                      <div>
+                        <div class="row-title">Load classes and members</div>
+                        <div class="row-meta">Use import tools or manual entry from Settings.</div>
+                      </div>
+                      <div class="row-pill">Data</div>
+                    </div>
+                    <div class="table-row row-setup">
+                      <div class="step-index">3</div>
+                      <div>
+                        <div class="row-title">Create actions and tiers</div>
+                        <div class="row-meta">Define scoring logic and recognition thresholds.</div>
+                      </div>
+                      <div class="row-pill">Rules</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="stage-card">
+                  <div class="list-head">
+                    <div>
+                      <div class="card-title">Live Sync Status</div>
+                      <div class="card-sub">Health and readiness at a glance</div>
+                    </div>
+                  </div>
+                  <div class="metric-grid">
+                    <div class="metric">
+                      <div class="metric-label">State</div>
+                      <div class="metric-value green">Online</div>
+                    </div>
+                    <div class="metric">
+                      <div class="metric-label">Queued</div>
+                      <div class="metric-value gold">0</div>
+                    </div>
+                    <div class="metric">
+                      <div class="metric-label">Last Pull</div>
+                      <div class="metric-value blue">2m ago</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="split-lower">
+                <div class="stage-card">
+                  <div class="card-title" style="margin-bottom:10px;">Primary Settings Sections</div>
+                  <div class="table-list">
+                    <div class="table-row row-report">
+                      <div class="row-title">Classes</div>
+                      <div class="row-meta">Organize member groups</div>
+                      <div class="row-points">12 groups</div>
+                    </div>
+                    <div class="table-row row-report">
+                      <div class="row-title">Actions</div>
+                      <div class="row-meta">Attendance, Verse, Guest</div>
+                      <div class="row-points">9 actions</div>
+                    </div>
+                    <div class="table-row row-report">
+                      <div class="row-title">Tiers</div>
+                      <div class="row-meta">Bronze to Gold</div>
+                      <div class="row-points">4 tiers</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="stage-card">
+                  <div class="card-title" style="margin-bottom:10px;">First Launch Guidance</div>
+                  <div class="step-shell">
+                    <div class="step-panel">
+                      <div class="step-index">A</div>
+                      <div class="step-title">Connect</div>
+                      <div class="step-copy">Verify the sync server before editing data.</div>
+                    </div>
+                    <div class="step-panel">
+                      <div class="step-index">B</div>
+                      <div class="step-title">Import</div>
+                      <div class="step-copy">Use the template to avoid field mismatches.</div>
+                    </div>
+                    <div class="step-panel">
+                      <div class="step-index">C</div>
+                      <div class="step-title">Test</div>
+                      <div class="step-copy">Award one action and confirm the report output.</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="scene" id="scene-1">
+            <div class="toolbar">
+              <span class="toolbar-title">ChurchScore Live · Members</span>
+              <div class="toolbar-actions">
+                <div class="tb-btn">🔍</div>
+                <div class="tb-btn">↻</div>
+                <div class="tb-btn green">＋</div>
+              </div>
+            </div>
+            <div class="status-bar">
+              <span class="mini-tag">Class Filter</span>
+              <span>Youth Choir selected</span>
+              <span class="live-pill">Roster Updated</span>
+            </div>
+            <div class="scene-shell">
+              <div class="stage-card">
+                <div class="picker-row">
+                  <span class="picker-chip">Adults</span>
+                  <span class="picker-chip active">Youth Choir</span>
+                  <span class="picker-chip">Teen Girls</span>
+                  <span class="picker-chip">Teen Boys</span>
+                  <span class="picker-chip">Leadership</span>
+                </div>
+                <div class="table-list">
+                  <div class="table-row row-roster">
+                    <div>
+                      <div class="row-title">Amara Johnson</div>
+                      <div class="row-meta">Current class: Youth Choir</div>
+                    </div>
+                    <div class="row-pill">Gold Tier</div>
+                    <div class="row-points">420 pts</div>
+                  </div>
+                  <div class="table-row row-roster">
+                    <div>
+                      <div class="row-title">Micah Smith</div>
+                      <div class="row-meta">Current class: Youth Choir</div>
+                    </div>
+                    <div class="row-pill">Silver Tier</div>
+                    <div class="row-points">278 pts</div>
+                  </div>
+                  <div class="table-row row-roster">
+                    <div>
+                      <div class="row-title">Naomi Carter</div>
+                      <div class="row-meta">Current class: Youth Choir</div>
+                    </div>
+                    <div class="row-pill">Bronze Tier</div>
+                    <div class="row-points">164 pts</div>
+                  </div>
+                  <div class="table-row row-roster">
+                    <div>
+                      <div class="row-title">Elijah Brooks</div>
+                      <div class="row-meta">Current class: Youth Choir</div>
+                    </div>
+                    <div class="row-pill">Starter</div>
+                    <div class="row-points">58 pts</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="split-lower">
+                <div class="stage-card">
+                  <div class="card-title" style="margin-bottom:10px;">Roster Summary</div>
+                  <div class="metric-grid">
+                    <div class="metric">
+                      <div class="metric-label">Members</div>
+                      <div class="metric-value gold">24</div>
+                    </div>
+                    <div class="metric">
+                      <div class="metric-label">Top Tier</div>
+                      <div class="metric-value green">6</div>
+                    </div>
+                    <div class="metric">
+                      <div class="metric-label">This Month</div>
+                      <div class="metric-value blue">81 awards</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="stage-card">
+                  <div class="card-title" style="margin-bottom:10px;">Why This View Matters</div>
+                  <div class="step-copy" style="font-size:0.55rem;">
+                    The roster view is the quickest way to confirm that imports landed in the right class and that point totals are accumulating as expected before a live service begins.
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="scene" id="scene-2">
+            <div class="toolbar">
+              <span class="toolbar-title">ChurchScore Live · Member Detail</span>
+              <div class="toolbar-actions">
+                <div class="tb-btn">📷</div>
+                <div class="tb-btn">✎</div>
+                <div class="tb-btn green">✓</div>
+              </div>
+            </div>
+            <div class="status-bar">
+              <span class="live-pill">Profile View</span>
+              <span>Tap photo to update image · use class menu to reassign</span>
+            </div>
+            <div class="scene-shell">
+              <div class="stage-card">
+                <div class="profile-shell">
+                  <div class="avatar">A</div>
+                  <div>
+                    <div class="profile-name">Amara Johnson</div>
+                    <div class="profile-meta">Current class: Youth Choir<br/>Last month attendance: 9 days<br/>Lifetime points: 420</div>
+                    <div class="tier-strip">
+                      <span class="tier-token">Starter</span>
+                      <span class="tier-token">Bronze</span>
+                      <span class="tier-token">Silver</span>
+                      <span class="tier-token active">Gold</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="top-grid">
+                <div class="stage-card">
+                  <div class="card-title" style="margin-bottom:10px;">Member Snapshot</div>
+                  <div class="metric-grid">
+                    <div class="metric">
+                      <div class="metric-label">Tier</div>
+                      <div class="metric-value gold">Gold</div>
+                    </div>
+                    <div class="metric">
+                      <div class="metric-label">Class</div>
+                      <div class="metric-value blue">Youth</div>
+                    </div>
+                    <div class="metric">
+                      <div class="metric-label">Attendance</div>
+                      <div class="metric-value green">9 days</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="stage-card">
+                  <div class="card-title" style="margin-bottom:10px;">Class Change Menu</div>
+                  <div class="picker-row">
+                    <span class="picker-chip active">Youth Choir</span>
+                    <span class="picker-chip">Leadership</span>
+                    <span class="picker-chip">Adults</span>
+                    <span class="picker-chip">Special Events</span>
+                  </div>
+                  <div class="step-copy" style="font-size:0.54rem;">
+                    Staff can move a member to another class while keeping lifetime points and historical scoring intact.
+                  </div>
+                </div>
+              </div>
+
+              <div class="stage-card">
+                <div class="card-title" style="margin-bottom:10px;">What This Screen Centralizes</div>
+                <div class="step-shell">
+                  <div class="step-panel">
+                    <div class="step-index">1</div>
+                    <div class="step-title">Photo</div>
+                    <div class="step-copy">Store a recognizable profile image from the device picker.</div>
+                  </div>
+                  <div class="step-panel">
+                    <div class="step-index">2</div>
+                    <div class="step-title">Progress</div>
+                    <div class="step-copy">Show current tier, lifetime score, and recent attendance patterns.</div>
+                  </div>
+                  <div class="step-panel">
+                    <div class="step-index">3</div>
+                    <div class="step-title">Reassign</div>
+                    <div class="step-copy">Update a member’s class without leaving the profile context.</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="scene" id="scene-3">
+            <div class="toolbar">
+              <span class="toolbar-title">ChurchScore Live · Award Points</span>
+              <div class="toolbar-actions">
+                <div class="tb-btn">←</div>
+                <div class="tb-btn green">Submit</div>
+                <div class="tb-btn">↻</div>
+              </div>
+            </div>
+            <div class="status-bar">
+              <span class="mini-tag">All Classes</span>
+              <span>Check actions for every member who earned them, then submit.</span>
+              <span class="live-pill">Live Entry</span>
+            </div>
+            <div class="scene-shell">
+              <div class="stage-card">
+                <div class="picker-row">
+                  <span class="picker-chip active">All Classes</span>
+                  <span class="picker-chip">Youth Choir</span>
+                  <span class="picker-chip">Adults</span>
+                  <span class="picker-chip">Leadership</span>
+                </div>
+
+                <div class="table-list">
+                  <div class="table-row row-action">
+                    <div>
+                      <div class="row-title">Amara Johnson</div>
+                      <div class="row-meta">Attendance · Verse · Guest · Service</div>
+                    </div>
+                    <span class="toggle-dot on">✓</span>
+                    <span class="toggle-dot on">✓</span>
+                    <span class="toggle-dot">•</span>
+                    <span class="toggle-dot on">✓</span>
+                  </div>
+                  <div class="table-row row-action">
+                    <div>
+                      <div class="row-title">Micah Smith</div>
+                      <div class="row-meta">Attendance · Verse · Guest · Service</div>
+                    </div>
+                    <span class="toggle-dot on">✓</span>
+                    <span class="toggle-dot">•</span>
+                    <span class="toggle-dot">•</span>
+                    <span class="toggle-dot on">✓</span>
+                  </div>
+                  <div class="table-row row-action">
+                    <div>
+                      <div class="row-title">Naomi Carter</div>
+                      <div class="row-meta">Attendance · Verse · Guest · Service</div>
+                    </div>
+                    <span class="toggle-dot on">✓</span>
+                    <span class="toggle-dot on">✓</span>
+                    <span class="toggle-dot on">✓</span>
+                    <span class="toggle-dot">•</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="split-lower">
+                <div class="stage-card">
+                  <div class="card-title" style="margin-bottom:10px;">Action Values</div>
+                  <div class="table-list">
+                    <div class="table-row row-report">
+                      <div class="row-title">Attendance</div>
+                      <div class="row-meta">Base participation</div>
+                      <div class="row-points">10 pts</div>
+                    </div>
+                    <div class="table-row row-report">
+                      <div class="row-title">Bible Verse</div>
+                      <div class="row-meta">Prepared recitation</div>
+                      <div class="row-points">15 pts</div>
+                    </div>
+                    <div class="table-row row-report">
+                      <div class="row-title">Guest Invite</div>
+                      <div class="row-meta">Growth action</div>
+                      <div class="row-points">20 pts</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="stage-card">
+                  <div class="card-title" style="margin-bottom:10px;">Why This Matters</div>
+                  <div class="step-copy" style="font-size:0.55rem;">
+                    This grid turns service-time data entry into a single structured action. Once submitted, point records are created immediately and feed both the roster totals and report system.
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="scene" id="scene-4">
+            <div class="toolbar">
+              <span class="toolbar-title">ChurchScore Live · Reports</span>
+              <div class="toolbar-actions">
+                <div class="tb-btn">Q1</div>
+                <div class="tb-btn">Q2</div>
+                <div class="tb-btn green">Export</div>
+              </div>
+            </div>
+            <div class="status-bar">
+              <span class="mini-tag">Custom Report Builder</span>
+              <span>Date filters · member filters · action filters</span>
+              <span class="live-pill">PDF / CSV</span>
+            </div>
+            <div class="scene-shell">
+              <div class="top-grid">
+                <div class="stage-card">
+                  <div class="card-title" style="margin-bottom:10px;">Quick Templates</div>
+                  <div class="picker-row">
+                    <span class="picker-chip active">Monthly</span>
+                    <span class="picker-chip">Q1</span>
+                    <span class="picker-chip">Q2</span>
+                    <span class="picker-chip">Q3</span>
+                    <span class="picker-chip">Q4</span>
+                  </div>
+                  <div class="report-line">Amara Johnson - 45 pts</div>
+                  <div class="report-line">&nbsp;&nbsp;Apr 10, 2026 - Attendance: 10</div>
+                  <div class="report-line">&nbsp;&nbsp;Apr 17, 2026 - Bible Verse: 15</div>
+                  <div class="report-line">&nbsp;&nbsp;Apr 17, 2026 - Service Help: 20</div>
+                  <div class="report-line">Micah Smith - 30 pts</div>
+                </div>
+                <div class="stage-card">
+                  <div class="card-title" style="margin-bottom:10px;">Filter Summary</div>
+                  <div class="metric-grid">
+                    <div class="metric">
+                      <div class="metric-label">Start</div>
+                      <div class="metric-value blue">Apr 1</div>
+                    </div>
+                    <div class="metric">
+                      <div class="metric-label">End</div>
+                      <div class="metric-value blue">Apr 30</div>
+                    </div>
+                    <div class="metric">
+                      <div class="metric-label">Members</div>
+                      <div class="metric-value green">All</div>
+                    </div>
+                  </div>
+                  <div class="export-strip">
+                    <div class="export-btn pdf">Export PDF</div>
+                    <div class="export-btn csv">Export CSV</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="stage-card">
+                <div class="card-title" style="margin-bottom:10px;">Class Summary Snapshot</div>
+                <div class="table-list">
+                  <div class="table-row row-report">
+                    <div class="row-title">Youth Choir</div>
+                    <div class="row-meta">Top scoring class this month</div>
+                    <div class="row-points">820 pts</div>
+                  </div>
+                  <div class="table-row row-report">
+                    <div class="row-title">Adults</div>
+                    <div class="row-meta">Strong attendance consistency</div>
+                    <div class="row-points">675 pts</div>
+                  </div>
+                  <div class="table-row row-report">
+                    <div class="row-title">Leadership</div>
+                    <div class="row-meta">Smaller group, higher average</div>
+                    <div class="row-points">312 pts</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="scene" id="scene-5">
+            <div class="toolbar">
+              <span class="toolbar-title">ChurchScore Live · Import + Sync</span>
+              <div class="toolbar-actions">
+                <div class="tb-btn">📄</div>
+                <div class="tb-btn">⬆</div>
+                <div class="tb-btn green">Sync</div>
+              </div>
+            </div>
+            <div class="status-bar">
+              <span class="live-pill">Template Ready</span>
+              <span>Use the provided workbook so sheet names and headers match the importer.</span>
+              <span class="mini-tag">Excel + CSV</span>
+            </div>
+            <div class="scene-shell">
+              <div class="sync-rail">
+                <div class="sync-card">
+                  <div class="card-title" style="margin-bottom:10px;">Workbook Structure</div>
+                  <div class="sync-row">
+                    <div class="sync-left"><span class="sync-dot blue"></span><span>Members Import</span></div>
+                    <span class="mono">Name | Class | Action | Points | Date</span>
+                  </div>
+                  <div class="sync-row">
+                    <div class="sync-left"><span class="sync-dot blue"></span><span>Actions Import</span></div>
+                    <span class="mono">Name | Points</span>
+                  </div>
+                  <div class="sync-row">
+                    <div class="sync-left"><span class="sync-dot blue"></span><span>Tiers Import</span></div>
+                    <span class="mono">Name | Threshold</span>
+                  </div>
+                  <div class="sync-row">
+                    <div class="sync-left"><span class="sync-dot orange"></span><span>Best Practice</span></div>
+                    <span>Import actions and tiers first, then member history.</span>
+                  </div>
+                </div>
+
+                <div class="sync-card">
+                  <div class="card-title" style="margin-bottom:10px;">Sync Console</div>
+                  <div class="sync-row">
+                    <div class="sync-left"><span class="sync-dot"></span><span>Server status</span></div>
+                    <span>Connected</span>
+                  </div>
+                  <div class="sync-row">
+                    <div class="sync-left"><span class="sync-dot"></span><span>Queued offline changes</span></div>
+                    <span>0 pending</span>
+                  </div>
+                  <div class="sync-row">
+                    <div class="sync-left"><span class="sync-dot blue"></span><span>Last full sync</span></div>
+                    <span>Today · 9:14 AM</span>
+                  </div>
+                  <div class="sync-row">
+                    <div class="sync-left"><span class="sync-dot orange"></span><span>Import note</span></div>
+                    <span>Excel member history can create duplicates if repeated names appear on many rows.</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="stage-card">
+                <div class="card-title" style="margin-bottom:10px;">Linked Resources</div>
+                <div class="step-shell">
+                  <div class="step-panel">
+                    <div class="step-index">1</div>
+                    <div class="step-title">Import Template</div>
+                    <div class="step-copy">Download the exact worksheet structure the current app recognizes.</div>
+                  </div>
+                  <div class="step-panel">
+                    <div class="step-index">2</div>
+                    <div class="step-title">How-To Guide</div>
+                    <div class="step-copy">Open the full manual for setup, feature behavior, and troubleshooting notes.</div>
+                  </div>
+                  <div class="step-panel">
+                    <div class="step-index">3</div>
+                    <div class="step-title">Launch Workflow</div>
+                    <div class="step-copy">Connect, import, verify roster totals, award sample points, then run a test report.</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="demo-caption" id="demo-caption">
+        <div class="demo-step" id="caption-step">Scene 1 of 6</div>
+        <div class="demo-title" id="caption-title">Setup and Sync Foundations</div>
+        <div class="demo-body" id="caption-body">ChurchScore Live starts in Settings where an admin can configure the server URL, confirm connection health, pull a full sync, and establish the exact sequence for classes, actions, tiers, and member imports.</div>
+      </div>
+    </div>
+
+    <div class="progress-dots">
+      <div class="pdot active" onclick="showScene(0)"></div>
+      <div class="pdot" onclick="showScene(1)"></div>
+      <div class="pdot" onclick="showScene(2)"></div>
+      <div class="pdot" onclick="showScene(3)"></div>
+      <div class="pdot" onclick="showScene(4)"></div>
+      <div class="pdot" onclick="showScene(5)"></div>
+    </div>
+  </div>
+</section>
+
+<section class="section reveal">
+  <div class="section-label">Included Resources</div>
+  <h2 class="section-title">Everything needed to launch<br><em>without guessing the format.</em></h2>
+  <p class="section-body">
+    These links point to the deliverables generated from the actual ChurchScore codebase and current importer behavior.
+  </p>
+
+  <div class="resource-grid">
+    <div class="resource-card">
+      <div class="resource-title">Excel Import Template</div>
+      <div class="resource-body">A workbook with the exact worksheet names and headers recognized by the current Excel importer.</div>
+      <a class="resource-link" href="outputs/churchscore-guide-2026-04-28/ChurchScore_Import_Template.xlsx">Open Template →</a>
+    </div>
+    <div class="resource-card">
+      <div class="resource-title">Detailed How-To Guide</div>
+      <div class="resource-body">A full guide covering startup, Members, Points, Reports, Settings, imports, sync, troubleshooting, and best practices.</div>
+      <a class="resource-link" href="outputs/churchscore-guide-2026-04-28/ChurchScore_How_To_Guide.md">Open Guide →</a>
+    </div>
+    <div class="resource-card">
+      <div class="resource-title">Recommended First Run</div>
+      <div class="resource-body">Connect to sync, import or create classes, load actions, define tiers, add members, award test points, and export a report.</div>
+      <a class="resource-link" href="#demo">Replay Demo →</a>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="footer-brand">ChurchScore<em>Live</em></div>
+  <p class="footer-sub">
+    An animated product walkthrough based on the ChurchScore app’s real feature set, with setup guidance and direct links to the current import template and operational manual.
+  </p>
+</footer>
+
+<script>
+const scenes = [
+  {
+    step: "Scene 1 of 6",
+    title: "Setup and Sync Foundations",
+    body: "ChurchScore Live starts in Settings where an admin can configure the server URL, confirm connection health, pull a full sync, and establish the exact sequence for classes, actions, tiers, and member imports."
+  },
+  {
+    step: "Scene 2 of 6",
+    title: "Class-Based Member Rosters",
+    body: "The Members tab is built for fast roster checks. Staff can switch classes instantly, see point totals at a glance, and verify that imported members landed in the right group before the service begins."
+  },
+  {
+    step: "Scene 3 of 6",
+    title: "Member Detail and Tier Visibility",
+    body: "Open any member to see photo, class assignment, last month attendance, lifetime points, and the current tier. This gives leaders a quick progress conversation screen without digging through reports."
+  },
+  {
+    step: "Scene 4 of 6",
+    title: "Live Point Awarding",
+    body: "The Award Points grid is the heart of service-time workflow. Choose a class or all classes, check the actions each member earned, and submit once to create point records that feed every other part of the app."
+  },
+  {
+    step: "Scene 5 of 6",
+    title: "Reporting and Export",
+    body: "Monthly and quarterly templates provide fast summaries, while the custom report builder adds date, member, and action filters. Reports can then be exported through the app’s PDF and CSV share flow."
+  },
+  {
+    step: "Scene 6 of 6",
+    title: "Imports, Resources, and Live Sync",
+    body: "The final workflow ties everything together: use the provided Excel template, follow the guide, respect the importer’s current constraints, and keep the sync panel visible so offline queueing or reconnect issues are obvious."
+  }
+];
+
+let currentScene = 0;
+let autoplayEnabled = true;
+let autoTimer = null;
+const SCENE_DURATION = 6200;
+
+function animateDemoProgress() {
+  const fill = document.getElementById('demo-progress-fill');
+  fill.style.transition = 'none';
+  fill.style.width = '0%';
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      fill.style.transition = autoplayEnabled ? `width ${SCENE_DURATION}ms linear` : 'none';
+      fill.style.width = autoplayEnabled ? '100%' : '0%';
+    });
+  });
+}
+
+function showScene(index) {
+  clearTimeout(autoTimer);
+
+  document.querySelectorAll('.scene').forEach((scene) => scene.classList.remove('active'));
+  document.getElementById(`scene-${index}`).classList.add('active');
+
+  const data = scenes[index];
+  const caption = document.getElementById('demo-caption');
+  caption.classList.remove('animating');
+  void caption.offsetWidth;
+  caption.classList.add('animating');
+
+  document.getElementById('caption-step').textContent = data.step;
+  document.getElementById('caption-title').textContent = data.title;
+  document.getElementById('caption-body').textContent = data.body;
+
+  document.querySelectorAll('.scene-btn').forEach((button, i) => {
+    button.classList.toggle('active', i === index);
+  });
+
+  document.querySelectorAll('.pdot').forEach((dot, i) => {
+    dot.classList.toggle('active', i === index);
+  });
+
+  currentScene = index;
+  animateDemoProgress();
+  scheduleAuto();
+}
+
+function scheduleAuto() {
+  if (!autoplayEnabled) return;
+  autoTimer = setTimeout(() => {
+    showScene((currentScene + 1) % scenes.length);
+  }, SCENE_DURATION);
+}
+
+function toggleAutoplay() {
+  autoplayEnabled = !autoplayEnabled;
+  clearTimeout(autoTimer);
+
+  const toggle = document.getElementById('demo-toggle');
+  const label = document.getElementById('toggle-label');
+  toggle.dataset.playing = autoplayEnabled ? 'true' : 'false';
+  label.textContent = autoplayEnabled ? 'Auto-play on' : 'Auto-play off';
+
+  if (autoplayEnabled) {
+    animateDemoProgress();
+    scheduleAuto();
+  } else {
+    const fill = document.getElementById('demo-progress-fill');
+    fill.style.transition = 'none';
+    fill.style.width = '0%';
+  }
+}
+
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach((entry) => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      observer.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.12 });
+
+document.querySelectorAll('.reveal').forEach((el) => observer.observe(el));
+
+document.addEventListener('keydown', (event) => {
+  if (event.key === 'ArrowRight') {
+    showScene((currentScene + 1) % scenes.length);
+  } else if (event.key === 'ArrowLeft') {
+    showScene((currentScene - 1 + scenes.length) % scenes.length);
+  } else if (event.key === ' ') {
+    event.preventDefault();
+    toggleAutoplay();
+  }
+});
+
+showScene(0);
+</script>
+</body>
+</html>
